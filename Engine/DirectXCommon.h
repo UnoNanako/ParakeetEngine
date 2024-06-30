@@ -28,11 +28,11 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle();
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle();
 	//deviceゲッター
-	ID3D12Device* GetDevice() { return mDevice.Get(); }
-	ID3D12DescriptorHeap* GetRtvDescriptorHeap() { return mRtvDescriptorHeap.Get(); }
-	ID3D12DescriptorHeap* GetSrvDescriptorHeap() { return mSrvDescriptorHeap.Get(); }
-	ID3D12DescriptorHeap* GetDsvDescriptorHeap() { return mDsvDescriptorHeap.Get(); }
-	ID3D12GraphicsCommandList* GetCommandList() { return mCommandList.Get(); }
+	Microsoft::WRL::ComPtr<ID3D12Device> GetDevice() { return mDevice.Get(); }
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetRtvDescriptorHeap() { return mRtvDescriptorHeap.Get(); }
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetSrvDescriptorHeap() { return mSrvDescriptorHeap.Get(); }
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDsvDescriptorHeap() { return mDsvDescriptorHeap.Get(); }
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> GetCommandList() { return mCommandList.Get(); }
 	//バックバッファの数を取得
 	size_t GetBackBufferCount() const { return mSwapChainResource.size(); }
 

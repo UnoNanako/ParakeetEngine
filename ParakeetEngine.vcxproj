@@ -161,6 +161,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\MyGame.cpp" />
     <ClCompile Include="Engine\Framework.cpp" />
     <ClCompile Include="Engine\Logger.cpp" />
+    <ClCompile Include="Engine\Input\Input.cpp" />
+    <ClCompile Include="Engine\ImGuiManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\WinApp.cpp" />
   </ItemGroup>
@@ -179,6 +181,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Framework.h" />
     <ClInclude Include="Engine\WinApp.h" />
     <ClInclude Include="Engine\Logger.h" />
+    <ClInclude Include="Engine\Input\Input.h" />
+    <ClInclude Include="Engine\ImGuiManager.h" />
+    <ClInclude Include="MyMath.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Externals\imgui\LICENSE.txt" />

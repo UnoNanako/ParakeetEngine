@@ -3,7 +3,7 @@
 #include <memory>
 
 class MyGame : public Framework {
-public:
+private:
 	void Initialize() override;
 	void Finalize() override;
 	void Update() override;
