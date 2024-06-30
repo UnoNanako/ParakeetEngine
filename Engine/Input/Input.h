@@ -6,7 +6,7 @@
 #include <dinput.h>
 #include <wrl.h>
 #include <memory>
-#include "MyMath.h"
+#include "Math/MyMath.h"
 
 class WinApp;
 

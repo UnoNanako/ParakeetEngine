@@ -3,6 +3,7 @@
 #include "DirectXCommon.h"
 #include "Input/Input.h"
 #include "ImGuiManager.h"
+#include "2D/SpriteCommon.h"
 
 void Framework::Initialize() {
 	mWinApp = std::make_shared<WinApp>();
@@ -13,9 +14,12 @@ void Framework::Initialize() {
 	mInput->Initialize(mWinApp);
 	mImGui = std::make_shared<ImGuiManager>();
 	mImGui->Initialize(mWinApp,mDxCommon);
+	mSpriteCommon = std::make_shared<SpriteCommon>();
+	mSpriteCommon->Initialize(mDxCommon);
 }
 
 void Framework::Finalize() {
+	mSpriteCommon->Finalize();
 	mImGui->Finalize();
 	mDxCommon->Finalize();
 	mWinApp->Finalize();
