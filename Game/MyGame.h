@@ -1,6 +1,9 @@
 #pragma once
 #include "Framework.h"
+#include "Transform.h"
 #include <memory>
+
+class Sprite;
 
 class MyGame : public Framework {
 private:
@@ -11,5 +14,7 @@ private:
 
 private:
 	//std::shared_ptr<GamePlayScene> mScene = nullptr;
+	std::shared_ptr<Sprite> mSprite;
+	Transform mSpriteTransform;
 };
 

@@ -6,6 +6,7 @@ class DirectXCommon;
 class Input;
 class ImGuiManager;
 class SpriteCommon;
+class ResourceManager;
 
 class Framework{
 public:
@@ -35,6 +36,7 @@ protected:
 	std::shared_ptr<DirectXCommon> mDxCommon;
 	std::shared_ptr<ImGuiManager> mImGui;
 	std::shared_ptr<Input> mInput;
+	std::shared_ptr<ResourceManager> mResourceManager;
 	std::shared_ptr<SpriteCommon> mSpriteCommon;
 	//std::shared_ptr<ModelCommon> mModelCommon;
 	//std::shared_ptr<ParticleCommon> mParticleCommon;

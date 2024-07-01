@@ -4,6 +4,7 @@
 #include "Input/Input.h"
 #include "ImGuiManager.h"
 #include "2D/SpriteCommon.h"
+#include "ResourceManager.h"
 
 void Framework::Initialize() {
 	mWinApp = std::make_shared<WinApp>();
@@ -14,6 +15,7 @@ void Framework::Initialize() {
 	mInput->Initialize(mWinApp);
 	mImGui = std::make_shared<ImGuiManager>();
 	mImGui->Initialize(mWinApp,mDxCommon);
+	mResourceManager = std::make_shared<ResourceManager>();
 	mSpriteCommon = std::make_shared<SpriteCommon>();
 	mSpriteCommon->Initialize(mDxCommon);
 }

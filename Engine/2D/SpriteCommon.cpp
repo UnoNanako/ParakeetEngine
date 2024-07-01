@@ -15,7 +15,6 @@ void SpriteCommon::Initialize(std::shared_ptr<DirectXCommon> dxCommon){
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 	// RootParameter作成。複数設定できるので配列。
 	D3D12_ROOT_PARAMETER rootParameters[4] = {};
-
 	//Material
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;    // CBVを使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;   // PixelShaderで使う
@@ -36,8 +35,6 @@ void SpriteCommon::Initialize(std::shared_ptr<DirectXCommon> dxCommon){
 	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
 	rootParameters[3].DescriptorTable.pDescriptorRanges = descriptorRange;  // Tableの中身の配列を指定
 	rootParameters[3].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange); // Tableで利用する数
-
-
 
 	descriptionRootSignature.pParameters = rootParameters;  // ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters);  // 配列の長さ
@@ -136,6 +133,15 @@ void SpriteCommon::Initialize(std::shared_ptr<DirectXCommon> dxCommon){
 	// 実際に生成
 	hr = dxCommon->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&mGraphicsPipelineState));
 	assert(SUCCEEDED(hr));
+
+	//Sprite用のTransformMatrix用のリソースを作る。Matrix4x4。1つ分のサイズを用意する
+	mViewProjectionMatrixResource = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(Matrix4x4));
+	//書き込むためのアドレスを取得
+	mViewProjectionMatrixResource->Map(0, nullptr, reinterpret_cast<void**>(&mViewProjectionMatrixData));
+	Matrix4x4 viewMatrix = MakeIdentity4x4();
+	Matrix4x4 projectionMatrix = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kClientWidth), float(WinApp::kClientHeight), 0.0f, 100.0f);
+	Matrix4x4 viewProjectionMatrix = Multiply(viewMatrix, projectionMatrix);
+	*mViewProjectionMatrixData = viewProjectionMatrix;
 }
 
 void SpriteCommon::Finalize(){
@@ -145,6 +151,7 @@ void SpriteCommon::PreDraw(std::shared_ptr<DirectXCommon> dxCommon){
 	// RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	dxCommon->GetCommandList()->SetGraphicsRootSignature(mRootSignature.Get());
 	dxCommon->GetCommandList()->SetPipelineState(mGraphicsPipelineState.Get());   // PSOを設定		
+	dxCommon->GetCommandList()->SetGraphicsRootConstantBufferView(2, mViewProjectionMatrixResource->GetGPUVirtualAddress());
 }
 
 void SpriteCommon::PostDraw(std::shared_ptr<DirectXCommon> dxCommon){

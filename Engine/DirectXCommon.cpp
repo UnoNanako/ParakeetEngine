@@ -69,6 +69,8 @@ void DirectXCommon::PreDraw() {
 
 	mCommandList->RSSetViewports(1, &mViewport);  // Viewportを設定
 	mCommandList->RSSetScissorRects(1, &mScissorRect);    // Scirssorを設定
+	ID3D12DescriptorHeap* descriptorHeaps[] = { mSrvDescriptorHeap.Get()};
+	mCommandList->SetDescriptorHeaps(1, descriptorHeaps);
 }
 
 void DirectXCommon::PostDraw() {

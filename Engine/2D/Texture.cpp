@@ -23,8 +23,8 @@ void Texture::Create(std::shared_ptr<DirectXCommon> dxCommon, const std::string&
 	dxCommon->GetDevice()->CreateShaderResourceView(mResource.Get(), &srvDesc, textureSrvHandleCPU);
 }
 
-void Texture::Bind(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList){
-	commandList->SetGraphicsRootDescriptorTable(2, mSrvHandleGPU);
+void Texture::Bind(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList, uint32_t rootParamIndex){
+	commandList->SetGraphicsRootDescriptorTable(rootParamIndex, mSrvHandleGPU);
 }
 
 DirectX::ScratchImage Texture::LoadTexture(const std::string& filePath){

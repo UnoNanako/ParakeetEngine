@@ -10,7 +10,7 @@ class DirectXCommon;
 class Texture{
 public:
 	void Create(std::shared_ptr<DirectXCommon> dxCommon, const std::string& filePath);
-	void Bind(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList);
+	void Bind(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList,uint32_t rootParamIndex);
 	uint32_t GetWidth() { return mWidth; }
 	uint32_t GetHeight() { return mHeight; }
 

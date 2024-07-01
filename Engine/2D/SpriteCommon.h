@@ -1,4 +1,5 @@
 #pragma once
+#include "Math/MyMath.h"
 #include <wrl.h>
 #include <memory>
 #include <d3d12.h>
@@ -15,5 +16,7 @@ public:
 private:
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> mRootSignature;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState> mGraphicsPipelineState;
+	Microsoft::WRL::ComPtr<ID3D12Resource> mViewProjectionMatrixResource;
+	Matrix4x4* mViewProjectionMatrixData;
 };
 
