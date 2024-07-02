@@ -96,6 +96,9 @@
     <ClCompile Include="Engine\Math\Quaternion.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3D\Camera.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\MyGame.h">
@@ -173,7 +176,7 @@
     <ClInclude Include="Engine\StringUtility.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h">
+    <ClInclude Include="Engine\3D\Material.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Math\Vector4.h">
@@ -197,6 +200,9 @@
     <ClInclude Include="Engine\Math\Matrix3x3.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\3D\Camera.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Externals\imgui\LICENSE.txt">
@@ -206,8 +212,11 @@
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\Sprite.VS.hlsl" />
     <FxCompile Include="Resources\Shaders\Sprite.PS.hlsl" />
+    <FxCompile Include="Resources\Shaders\Object3D.VS.hlsl" />
+    <FxCompile Include="Resources\Shaders\Object3D.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Sprite.hlsli" />
+    <None Include="Resources\Shaders\Object3D.hlsli" />
   </ItemGroup>
 </Project>

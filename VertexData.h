@@ -3,7 +3,7 @@
 
 //頂点データの拡張
 struct VertexData {
-	Vector4 position;
-	Vector2 texcoord;
-	Vector3 normal;
+	Vector4 mPosition;
+	Vector2 mTexcoord;
+	Vector3 mNormal;
 };

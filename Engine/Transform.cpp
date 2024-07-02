@@ -12,7 +12,7 @@ void Transform::Create(std::shared_ptr<DirectXCommon> dxCommon){
 }
 
 void Transform::UpdateMatrix(){
-	Matrix4x4 worldMatrix = MakeAffineMatrix(scale,rotate,translate);
+	Matrix4x4 worldMatrix = MakeAffineMatrix(mScale,mRotate,mTranslate);
 	*mWorldMatrixData = worldMatrix;
 }
 

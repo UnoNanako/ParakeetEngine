@@ -12,16 +12,15 @@ struct Material;
 class Sprite{
 public:
 	void Create(std::shared_ptr<DirectXCommon> dxCommon, std::shared_ptr<Texture> texture);
-	void Update();
 	void Draw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList,const Transform& transform);
+
 private:
 	std::shared_ptr<Texture> mTexture;
 	Microsoft::WRL::ComPtr<ID3D12Resource> mVertexResource;
 	Microsoft::WRL::ComPtr<ID3D12Resource> mIndexResource;
-	Microsoft::WRL::ComPtr<ID3D12Resource> mMaterialResource;
+	Microsoft::WRL::ComPtr<ID3D12Resource> mColorResource;
 	D3D12_VERTEX_BUFFER_VIEW mVertexBufferView{};
 	D3D12_INDEX_BUFFER_VIEW mIndexBufferView{};
-	uint32_t* mIndexData;
-	Vector4* mMaterialData;
+	Vector4* mColorData;
 };
 

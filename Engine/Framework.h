@@ -7,6 +7,8 @@ class Input;
 class ImGuiManager;
 class SpriteCommon;
 class ResourceManager;
+class ModelCommon;
+class Camera;
 
 class Framework{
 public:
@@ -38,7 +40,8 @@ protected:
 	std::shared_ptr<Input> mInput;
 	std::shared_ptr<ResourceManager> mResourceManager;
 	std::shared_ptr<SpriteCommon> mSpriteCommon;
-	//std::shared_ptr<ModelCommon> mModelCommon;
+	std::shared_ptr<ModelCommon> mModelCommon;
+	std::shared_ptr<Camera> mCamera;
 	//std::shared_ptr<ParticleCommon> mParticleCommon;
 };
 

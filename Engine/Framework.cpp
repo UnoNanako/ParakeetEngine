@@ -5,6 +5,8 @@
 #include "ImGuiManager.h"
 #include "2D/SpriteCommon.h"
 #include "ResourceManager.h"
+#include "3D/ModelCommon.h"
+#include "3D/Camera.h"
 
 void Framework::Initialize() {
 	mWinApp = std::make_shared<WinApp>();
@@ -18,9 +20,12 @@ void Framework::Initialize() {
 	mResourceManager = std::make_shared<ResourceManager>();
 	mSpriteCommon = std::make_shared<SpriteCommon>();
 	mSpriteCommon->Initialize(mDxCommon);
+	mModelCommon = std::make_shared<ModelCommon>();
+	mModelCommon->Initialize(mDxCommon);
 }
 
 void Framework::Finalize() {
+	mModelCommon->Finalize();
 	mSpriteCommon->Finalize();
 	mImGui->Finalize();
 	mDxCommon->Finalize();

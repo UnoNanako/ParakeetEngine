@@ -4,6 +4,7 @@
 #include <memory>
 
 class Sprite;
+class Model;
 
 class MyGame : public Framework {
 private:
@@ -15,6 +16,8 @@ private:
 private:
 	//std::shared_ptr<GamePlayScene> mScene = nullptr;
 	std::shared_ptr<Sprite> mSprite;
+	std::shared_ptr<Model> mModel;
 	Transform mSpriteTransform;
+	Transform mModelTransform;
 };
 

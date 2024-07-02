@@ -13,12 +13,14 @@ public:
 	void UpdateMatrix();
 	void Bind(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList, uint32_t rootParamIndex)const;
 
+	Matrix4x4 GetMatWorld() const { return mMatWorld; }
+
 public:
-	Vector3 scale = { 1.0f,1.0f,1.0f };
-	Vector3 rotate = { 0.0f,0.0f,0.0f };
-	Vector3 translate = { 0.0f,0.0f,0.0f };
+	Vector3 mScale = { 1.0f,1.0f,1.0f };
+	Vector3 mRotate = { 0.0f,0.0f,0.0f };
+	Vector3 mTranslate = { 0.0f,0.0f,0.0f };
 	//親となるワールド変換へのポインタ
-	std::unique_ptr<Transform> mParent = nullptr;
+	std::shared_ptr<Transform> mParent = nullptr;
 
 private:
 	//ローカル→ワールド変換行列
