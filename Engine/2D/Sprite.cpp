@@ -1,7 +1,7 @@
 #include "Sprite.h"
 #include "DirectXCommon.h"
 #include "Transform.h"
-#include "VertexData.h"
+#include "3D/VertexData.h"
 #include "Math/MyMath.h"
 #include <Windows.h>
 

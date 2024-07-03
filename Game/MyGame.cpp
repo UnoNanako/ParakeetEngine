@@ -9,10 +9,14 @@
 #include "3D/ModelCommon.h"
 #include "3D/Camera.h"
 #include "3D/Model.h"
+#include "GameScene.h"
 
 void MyGame::Initialize() {
 	Framework::Initialize();
-	auto texture = mResourceManager->LoadTexture(mDxCommon, "Resources/Sekisei.png");
+	mGameScene = std::make_unique<GameScene>(this);
+	mGameScene->Initialize(mDxCommon);
+
+	/*auto texture = mResourceManager->LoadTexture(mDxCommon, "Resources/Sekisei.png");
 	mSprite = std::make_shared<Sprite>();
 	mSprite->Create(mDxCommon, texture);
 	mSpriteTransform.Create(mDxCommon);
@@ -20,7 +24,7 @@ void MyGame::Initialize() {
 
 	mModel = mResourceManager->LoadModel(mDxCommon, "Resources/Models/Player/Chick.obj");
 	mModelTransform.Create(mDxCommon);
-	mModelTransform.mTranslate = { 0.0f,0.0f,10.0f };
+	mModelTransform.mTranslate = { 0.0f,0.0f,10.0f };*/
 
 	mCamera = std::make_shared<Camera>();
 	mCamera->Initialize(mDxCommon);
@@ -28,16 +32,18 @@ void MyGame::Initialize() {
 
 void MyGame::Finalize() {
 	Framework::Finalize();
+	mGameScene->Finalize();
 }
 
 void MyGame::Update() {
 	Framework::Update();
+	mGameScene->Update(mInput);
 
 	if (mInput->PushKey(DIK_ESCAPE)) {
 		mEndRequest = true;
 	}
-	mSpriteTransform.UpdateMatrix();
-	mModelTransform.UpdateMatrix();
+	/*mSpriteTransform.UpdateMatrix();
+	mModelTransform.UpdateMatrix();*/
 	mCamera->UpdateMatrix();
 }
 
@@ -47,13 +53,20 @@ void MyGame::Draw() {
 
 	mModelCommon->PreDraw(mDxCommon,mCamera);
 	//-----モデルの描画ここから-----
-	mModel->Draw(mDxCommon->GetCommandList(), mModelTransform);
-	//-----モデルの描画ここまで-----
-	mModelCommon->PostDraw(mDxCommon);
 
+	mGameScene->ModelDraw(mDxCommon->GetCommandList());
+	//mModel->Draw(mDxCommon->GetCommandList(), mModelTransform);
+
+	//-----モデルの描画ここまで-----
+
+	mModelCommon->PostDraw(mDxCommon);
 	mSpriteCommon->PreDraw(mDxCommon);
+
 	//-----スプライトの描画ここから-----
-	mSprite->Draw(mDxCommon->GetCommandList(),mSpriteTransform);
+
+	mGameScene->SpriteDraw(mDxCommon->GetCommandList());
+	//mSprite->Draw(mDxCommon->GetCommandList(),mSpriteTransform);
+
 	//-----スプライトの描画ここまで-----
 	mSpriteCommon->PostDraw(mDxCommon);
 

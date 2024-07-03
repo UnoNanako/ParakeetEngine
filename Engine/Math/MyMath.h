@@ -23,6 +23,11 @@ inline T Lerp(const T& a, const T& b, float mInT) {
 	return (1.0f - mInT) * a + mInT * b;
 }
 
+struct AABB {
+	Vector3 mMin;
+	Vector3 mMax;
+};
+
 const float kPi = std::numbers::pi_v<float>;
 const float kPiOver2 = kPi / 2.0f; //π/2
 const float kInfinity = std::numeric_limits<float>::infinity(); //無限

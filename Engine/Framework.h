@@ -17,10 +17,9 @@ public:
 	//実行
 	void Run();
 
-	//std::shared_ptr<DirectXCommon> GetDxCommon() const { return mDxCommon; }
-	//std::shared_ptr<ModelCommon> GetModelCommon() const { return mModelCommon; }
-	//std::shared_ptr<ParticleCommon> GetParticleCommon() const { return mParticleCommon; }
-
+	std::shared_ptr<DirectXCommon> GetDxCommon()const { return mDxCommon; }
+	std::shared_ptr<ResourceManager> GetResourceManager() const{ return mResourceManager; }
+	
 protected:
 	//初期化
 	virtual void Initialize();
@@ -41,7 +40,6 @@ protected:
 	std::shared_ptr<ResourceManager> mResourceManager;
 	std::shared_ptr<SpriteCommon> mSpriteCommon;
 	std::shared_ptr<ModelCommon> mModelCommon;
-	std::shared_ptr<Camera> mCamera;
 	//std::shared_ptr<ParticleCommon> mParticleCommon;
 };
 

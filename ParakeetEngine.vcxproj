@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -54,7 +54,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine;$(SolutionDir)Game;$(SolutionDir);$(ProjectDir)externals\assimp\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Engine;$(SolutionDir)Externals;$(SolutionDir)Externals\assimp\include;$(SolutionDir)Game</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -81,7 +81,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine;$(SolutionDir)Game;$(SolutionDir);$(ProjectDir)externals\assimp\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Engine;$(SolutionDir)Externals;$(SolutionDir)Externals\assimp\include;$(SolutionDir)Game</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -108,6 +108,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Externals\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="Externals\imgui\imgui_tables.cpp" />
     <ClCompile Include="Externals\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Game\GameScene.cpp" />
+    <ClCompile Include="Game\GameObject.cpp" />
     <ClCompile Include="Game\MyGame.cpp" />
     <ClCompile Include="Engine\Framework.cpp" />
     <ClCompile Include="Engine\Logger.cpp" />
@@ -125,8 +127,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\ModelCommon.cpp" />
     <ClCompile Include="Engine\3D\Model.cpp" />
     <ClCompile Include="Engine\Math\Quaternion.cpp" />
+    <ClCompile Include="Game\Map.cpp" />
+    <ClCompile Include="Game\MapType.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\Block.h" />
     <ClInclude Include="Engine\3D\Camera.h" />
     <ClInclude Include="Engine\DirectXCommon.h" />
     <ClInclude Include="Externals\imgui\imconfig.h" />
@@ -138,6 +143,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Externals\imgui\imstb_rectpack.h" />
     <ClInclude Include="Externals\imgui\imstb_textedit.h" />
     <ClInclude Include="Externals\imgui\imstb_truetype.h" />
+    <ClInclude Include="Game\GameScene.h" />
+    <ClInclude Include="Game\GameObject.h" />
+    <ClInclude Include="Game\MapType.h" />
     <ClInclude Include="Game\MyGame.h" />
     <ClInclude Include="Engine\Framework.h" />
     <ClInclude Include="Engine\WinApp.h" />
@@ -160,7 +168,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3D\Model.h" />
     <ClInclude Include="Engine\Math\Quaternion.h" />
     <ClInclude Include="Engine\Math\Matrix3x3.h" />
-    <ClInclude Include="VertexData.h" />
+    <ClInclude Include="Game\Map.h" />
+    <ClInclude Include="Engine\3D\VertexData.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Externals\imgui\LICENSE.txt" />

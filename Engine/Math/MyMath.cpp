@@ -1,10 +1,6 @@
 #include "MyMath.h"
 #include <cmath>
 
-float Length(const Vector3& v) {
-	return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-}
-
 Matrix4x4 MakeIdentity4x4() {
 	Matrix4x4 ret;
 	ret.m[0][0] = 1.0f;
@@ -243,7 +239,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 
 Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip) {
 	Matrix4x4 ret;
-	ret.m[0][0] = 2.0f / (right - 1.0f);
+	ret.m[0][0] = 2.0f / (right - left);
 	ret.m[0][1] = 0.0f;
 	ret.m[0][2] = 0.0f;
 	ret.m[0][3] = 0.0f;
@@ -253,11 +249,11 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 	ret.m[1][3] = 0.0f;
 	ret.m[2][0] = 0.0f;
 	ret.m[2][1] = 0.0f;
-	ret.m[2][2] = 1.0f / (farClip - nearClip);
+	ret.m[2][2] = -2.0f / (farClip - nearClip);
 	ret.m[2][3] = 0.0f;
-	ret.m[3][0] = (left + right) / (left - right);
-	ret.m[3][1] = (top + bottom) / (bottom - top);
-	ret.m[3][2] = nearClip / (nearClip - farClip);
+	ret.m[3][0] = -(right + left) / (right - left);
+	ret.m[3][1] = -(top + bottom) / (top - bottom);
+	ret.m[3][2] = -(farClip + nearClip) / (farClip - nearClip);
 	ret.m[3][3] = 1.0f;
 	return ret;
 }
