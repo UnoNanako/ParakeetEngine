@@ -129,6 +129,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Math\Quaternion.cpp" />
     <ClCompile Include="Game\Map.cpp" />
     <ClCompile Include="Game\MapType.cpp" />
+    <ClCompile Include="Engine\3D\ParticleCommon.cpp" />
+    <ClCompile Include="Engine\3D\ParticleManager.cpp" />
+    <ClCompile Include="Engine\Math\Random.cpp" />
+    <ClCompile Include="Game\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Block.h" />
@@ -170,11 +174,28 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Math\Matrix3x3.h" />
     <ClInclude Include="Game\Map.h" />
     <ClInclude Include="Engine\3D\VertexData.h" />
+    <ClInclude Include="Engine\3D\ParticleCommon.h" />
+    <ClInclude Include="Engine\3D\ParticleManager.h" />
+    <ClInclude Include="Engine\3D\Particle.h" />
+    <ClInclude Include="Engine\Math\Random.h" />
+    <ClInclude Include="Game\Player.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Externals\imgui\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Resources\Shaders\Particle.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle.VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Resources\Shaders\Object3D.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
@@ -201,6 +222,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Shaders\Particle.hlsli" />
     <None Include="Resources\Shaders\Object3D.hlsli" />
     <None Include="Resources\Shaders\Sprite.hlsli" />
   </ItemGroup>

@@ -111,6 +111,18 @@
     <ClCompile Include="Game\MapType.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3D\ParticleCommon.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\ParticleManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Random.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\MyGame.h">
@@ -230,6 +242,21 @@
     <ClInclude Include="Game\MapType.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\3D\ParticleCommon.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\ParticleManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Particle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Random.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Externals\imgui\LICENSE.txt">
@@ -241,9 +268,12 @@
     <FxCompile Include="Resources\Shaders\Sprite.PS.hlsl" />
     <FxCompile Include="Resources\Shaders\Object3D.VS.hlsl" />
     <FxCompile Include="Resources\Shaders\Object3D.PS.hlsl" />
+    <FxCompile Include="Resources\Shaders\Particle.VS.hlsl" />
+    <FxCompile Include="Resources\Shaders\Particle.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Sprite.hlsli" />
     <None Include="Resources\Shaders\Object3D.hlsli" />
+    <None Include="Resources\Shaders\Particle.hlsli" />
   </ItemGroup>
 </Project>

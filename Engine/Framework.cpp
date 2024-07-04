@@ -7,6 +7,7 @@
 #include "ResourceManager.h"
 #include "3D/ModelCommon.h"
 #include "3D/Camera.h"
+#include "3D/ParticleCommon.h"
 
 void Framework::Initialize() {
 	mWinApp = std::make_shared<WinApp>();
@@ -22,9 +23,12 @@ void Framework::Initialize() {
 	mSpriteCommon->Initialize(mDxCommon);
 	mModelCommon = std::make_shared<ModelCommon>();
 	mModelCommon->Initialize(mDxCommon);
+	mParticleCommon = std::make_shared<ParticleCommon>();
+	mParticleCommon->Initialize(mDxCommon);
 }
 
 void Framework::Finalize() {
+	mParticleCommon->Finalize();
 	mModelCommon->Finalize();
 	mSpriteCommon->Finalize();
 	mImGui->Finalize();

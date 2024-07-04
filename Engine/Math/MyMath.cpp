@@ -85,6 +85,26 @@ Matrix4x4 MakeRotateZMatrix(float radian) {
 	return ret;
 }
 
+Matrix4x4 MakeScaleMatrix(const Vector3& scale){
+	float tmp[4][4] = {
+		{scale.x,0.0f,0.0f,0.0f},
+		{0.0f,scale.y,0.0f,0.0f},
+		{0.0f,0.0f,scale.z,0.0f},
+		{0.0f,0.0f,0.0f,1.0f}
+	};
+	return Matrix4x4(tmp);
+}
+
+Matrix4x4 MakeTranslateMatrix(const Vector3& translate){
+	float tmp[4][4] = {
+		{1.0f,0.0f,0.0f,0.0f},
+		{0.0f,1.0f,0.0f,0.0f},
+		{0.0f,0.0f,1.0f,0.0f},
+		{translate.x,translate.y,translate.z,1.0f}
+	};
+	return Matrix4x4(tmp);
+}
+
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 ret;
 	ret.m[0][0] = m1.m[0][0] * m2.m[0][0] + m1.m[0][1] * m2.m[1][0] + m1.m[0][2] * m2.m[2][0] +

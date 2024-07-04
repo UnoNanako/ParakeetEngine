@@ -12,7 +12,7 @@ class Map : public GameObject {
 public:
 	Map(MyGame* myGame);
 	void Initialize()override;
-	void Update()override;
+	void Update(std::shared_ptr<Input> input)override;
 	void DrawModel(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList)override;
 
 	std::vector<std::shared_ptr<Block>> GetBlocks() { return mBlocks; }

@@ -59,7 +59,7 @@ void Map::Initialize() {
 	}
 }
 
-void Map::Update() {
+void Map::Update(std::shared_ptr<Input> input) {
 	ImGui::Begin("Map");
 	if (ImGui::Button("Create")) {
 		std::shared_ptr<Block> block = std::make_unique<Block>();

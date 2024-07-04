@@ -19,7 +19,7 @@ void GameScene::Finalize(){
 }
 
 void GameScene::Update(std::shared_ptr<Input> input){
-	mMap->Update();
+	mMap->Update(input);
 }
 
 void GameScene::ModelDraw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList){

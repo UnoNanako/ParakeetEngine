@@ -18,6 +18,7 @@ public:
 	void SetFov(float fov) { mFov = fov; }
 
 	Vector3 GetTranslate() { return mTranslate; }
+	Vector3 GetRotate() { return mRotate; }
 	Matrix4x4 GetViewMatrix() { return mViewMatrix; }
 	Matrix4x4 GetProjectionMatrix() { return mProjectionMatrix; }
 

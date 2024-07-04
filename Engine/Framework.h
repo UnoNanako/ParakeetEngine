@@ -9,6 +9,7 @@ class SpriteCommon;
 class ResourceManager;
 class ModelCommon;
 class Camera;
+class ParticleCommon;
 
 class Framework{
 public:
@@ -40,6 +41,6 @@ protected:
 	std::shared_ptr<ResourceManager> mResourceManager;
 	std::shared_ptr<SpriteCommon> mSpriteCommon;
 	std::shared_ptr<ModelCommon> mModelCommon;
-	//std::shared_ptr<ParticleCommon> mParticleCommon;
+	std::shared_ptr<ParticleCommon> mParticleCommon;
 };
 

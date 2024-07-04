@@ -9,13 +9,14 @@ class MyGame;
 class Model;
 class Texture;
 class Camera;
+class Input;
 struct VertexData;
 
 class GameObject {
 public:
 	GameObject(MyGame* myGame);
 	virtual void Initialize() {}
-	virtual void Update() {}
+	virtual void Update(std::shared_ptr<Input> input) {}
 	virtual void DrawModel(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {}
 	virtual void DrawSprite(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {}
 
