@@ -2,7 +2,10 @@
 #include "Math/MyMath.h"
 #include "WinApp.h"
 
-void Camera::Initialize(std::shared_ptr<DirectXCommon> dxCommon){
+Camera::~Camera(){
+}
+
+void Camera::Initialize(){
 	mFov = 50.0f;
 }
 

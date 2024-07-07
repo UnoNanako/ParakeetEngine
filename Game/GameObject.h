@@ -14,11 +14,13 @@ struct VertexData;
 
 class GameObject {
 public:
+	virtual ~GameObject();
 	GameObject(MyGame* myGame);
 	virtual void Initialize() {}
 	virtual void Update(std::shared_ptr<Input> input) {}
 	virtual void DrawModel(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {}
 	virtual void DrawSprite(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {}
+	void UpdateMatrix();
 
 	/// <summary>
 	/// アクセッサ

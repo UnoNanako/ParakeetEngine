@@ -86,7 +86,10 @@ PixelShaderOutput main(VertexShaderOutput input){
         //specular += gSpotLight.color.rgb * gSpotLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f) * factor * falloffFactor;
         
         //拡散反射+鏡面反射+PointLight+SpotLight
-        output.color.rgb = diffuse + specular;
+        output.color.rgb = diffuse; // + specular;
+        if (gMaterial.shadeType == 1){
+            output.color.rgb += specular;
+        }
         output.color.a = gMaterial.color.a * textureColor.a;
         //output.color = gMaterial.color * textureColor * gDirectionalLight.color * cos * gDirectionalLight.intensity;
     }

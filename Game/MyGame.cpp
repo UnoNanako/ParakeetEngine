@@ -8,14 +8,23 @@
 #include "ResourceManager.h"
 #include "3D/ModelCommon.h"
 #include "3D/Camera.h"
+#include "PlayerCamera.h"
 #include "3D/Model.h"
 #include "3D/ParticleCommon.h"
 #include "GameScene.h"
+#include "Player.h"
 
 void MyGame::Initialize() {
 	Framework::Initialize();
+	mCamera = std::make_shared<PlayerCamera>();
+	mCamera->Initialize();
+
 	mGameScene = std::make_unique<GameScene>(this);
-	mGameScene->Initialize(mDxCommon);
+	mGameScene->Initialize();
+
+	//お互いに持つ
+	mCamera->SetPlayer(mGameScene->GetPlayer());
+	mGameScene->GetPlayer()->SetCamera(mCamera);
 
 	/*auto texture = mResourceManager->LoadTexture(mDxCommon, "Resources/Sekisei.png");
 	mSprite = std::make_shared<Sprite>();
@@ -27,10 +36,6 @@ void MyGame::Initialize() {
 	mModelTransform.Create(mDxCommon);
 	mModelTransform.mTranslate = { 0.0f,0.0f,10.0f };*/
 
-	mCamera = std::make_shared<Camera>();
-	mCamera->Initialize(mDxCommon);
-	mCamera->SetTranslate({ 0.0f,15.0f,-10.0f });
-	mCamera->SetRotate({ kPi/3.0f,0.0f,0.0f }); //20°下を向いている
 }
 
 void MyGame::Finalize() {
@@ -47,6 +52,7 @@ void MyGame::Update() {
 	}
 	/*mSpriteTransform.UpdateMatrix();
 	mModelTransform.UpdateMatrix();*/
+	mCamera->Update(mInput);
 	mCamera->UpdateMatrix();
 }
 

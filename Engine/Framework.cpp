@@ -19,6 +19,7 @@ void Framework::Initialize() {
 	mImGui = std::make_shared<ImGuiManager>();
 	mImGui->Initialize(mWinApp,mDxCommon);
 	mResourceManager = std::make_shared<ResourceManager>();
+	mResourceManager->Initialize(mDxCommon);
 	mSpriteCommon = std::make_shared<SpriteCommon>();
 	mSpriteCommon->Initialize(mDxCommon);
 	mModelCommon = std::make_shared<ModelCommon>();

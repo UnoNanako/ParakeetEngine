@@ -39,7 +39,7 @@ public:
 	void SetInitVelocityMax(Vector3 velocityMax) { mInitVelocityMax = velocityMax; }
 	void SetInitColorMin(Vector3 colorMin) { mInitColorMin = colorMin; }
 	void SetInitColorMax(Vector3 colorMax) { mInitColorMax = colorMax; }
-	void SetInitLifeTImeMin(float lifeTimeMin) { mInitLifeTimeMin = lifeTimeMin; }
+	void SetInitLifeTimeMin(float lifeTimeMin) { mInitLifeTimeMin = lifeTimeMin; }
 	void SetInitLifeTimeMax(float lifeTimeMax) { mInitLifeTimeMax = lifeTimeMax; }
 
 private:

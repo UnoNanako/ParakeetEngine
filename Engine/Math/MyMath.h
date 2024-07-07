@@ -28,6 +28,14 @@ struct AABB {
 	Vector3 mMax;
 };
 
+struct CollisionResult {
+	bool isColliding;
+	float depth;
+	Vector3 normal;
+};
+
+AABB CalcWorldAABB(const AABB& localAABB, const Vector3& translate);
+
 const float kPi = std::numbers::pi_v<float>;
 const float kPiOver2 = kPi / 2.0f; //π/2
 const float kInfinity = std::numeric_limits<float>::infinity(); //無限
@@ -35,29 +43,8 @@ const float kEpsilon = std::numeric_limits<float>::epsilon();
 
 float Length(const Vector3& v);
 
-Matrix4x4 MakeIdentity4x4();
-
-Matrix4x4 MakeRotateXMatrix(float radian);
-
-Matrix4x4 MakeRotateYMatrix(float radian);
-
-Matrix4x4 MakeRotateZMatrix(float radian);
-
-Matrix4x4 MakeScaleMatrix(const Vector3& scale);
-
-Matrix4x4 MakeTranslateMatrix(const Vector3& translate);
-
-Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
-
-Matrix4x4 Inverse(const Matrix4x4& m);
-
-Matrix4x4 MakeAffineMatrix(const Vector3& scale,const Vector3& rotate,const Vector3& translate);
-
-Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip);
-
-Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip);
-
 Matrix3x3 Transpose(const Matrix3x3& matrix);
 
-Matrix4x4 Transpose(const Matrix4x4& matrix);
+bool IsCollision(const AABB& aabb1, const AABB& aabb2, CollisionResult& result);
+
 

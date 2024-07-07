@@ -6,7 +6,7 @@
 
 class Sprite;
 class Model;
-class Camera;
+class PlayerCamera;
 
 class MyGame : public Framework {
 private:
@@ -15,12 +15,15 @@ private:
 	void Update() override;
 	void Draw() override;
 
+public:
+	std::shared_ptr<PlayerCamera> GetCamera() { return mCamera; }
+
 private:
 	/*std::shared_ptr<Sprite> mSprite;
 	std::shared_ptr<Model> mModel;
 	Transform mSpriteTransform;
 	Transform mModelTransform;*/
+	std::shared_ptr<PlayerCamera> mCamera;
 	std::unique_ptr<GameScene> mGameScene;
-	std::shared_ptr<Camera> mCamera;
 };
 

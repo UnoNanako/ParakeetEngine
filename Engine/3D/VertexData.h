@@ -1,7 +1,8 @@
 #pragma once
-#include "Math/MyMath.h"
+#include "Math/Vector2.h"
+#include "Math/Vector3.h"
+#include "Math/Vector4.h"
 
-//頂点データの拡張
 struct VertexData {
 	Vector4 mPosition;
 	Vector2 mTexcoord;

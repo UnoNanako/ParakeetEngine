@@ -31,10 +31,10 @@ void Model::Create(std::shared_ptr<DirectXCommon> dxCommon, const std::string& f
 	mMaterialResource = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(Material));
 	//書き込むためのアドレスを取得
 	mMaterialResource->Map(0, nullptr, reinterpret_cast<void**>(&mMaterialData));
-	mMaterialData->color = { 1.0f,1.0f,1.0f,1.0f };
+	mMaterialData->mColor = { 1.0f,1.0f,1.0f,1.0f };
 	//SpriteはLightingしないのでfalseを設定する
-	mMaterialData->enableLighting = true;
-	mMaterialData->shininess = 100.0f;
+	mMaterialData->mEnableLighting = true;
+	mMaterialData->mShininess = 100.0f;
 
 	//Texture
 	mTexture = std::make_unique<Texture>();
@@ -42,6 +42,7 @@ void Model::Create(std::shared_ptr<DirectXCommon> dxCommon, const std::string& f
 }
 
 void Model::Update() {
+	mMaterialData->mShadeType = mShadeType;
 }
 
 void Model::Draw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList, const Transform& transform) {

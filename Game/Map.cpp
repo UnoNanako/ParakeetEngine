@@ -8,7 +8,6 @@
 
 Map::Map(MyGame* myGame)
 	: GameObject(myGame) {
-
 }
 
 void Map::Initialize() {
@@ -40,15 +39,15 @@ void Map::Initialize() {
 			block->mTransform.mTranslate.x = blockData["Translate"][0].get<float>();
 			block->mTransform.mTranslate.y = blockData["Translate"][1].get<float>();
 			block->mTransform.mTranslate.z = blockData["Translate"][2].get<float>();
-			block->mAABB.mMax.x = blockData["Max"][0].get<float>();
-			block->mAABB.mMax.y = blockData["Max"][1].get<float>();
-			block->mAABB.mMax.z = blockData["Max"][2].get<float>();
-			block->mAABB.mMin.x = blockData["Min"][0].get<float>();
-			block->mAABB.mMin.y = blockData["Min"][1].get<float>();
-			block->mAABB.mMin.z = blockData["Min"][2].get<float>();
+			block->mLocalAABB.mMax.x = blockData["Max"][0].get<float>();
+			block->mLocalAABB.mMax.y = blockData["Max"][1].get<float>();
+			block->mLocalAABB.mMax.z = blockData["Max"][2].get<float>();
+			block->mLocalAABB.mMin.x = blockData["Min"][0].get<float>();
+			block->mLocalAABB.mMin.y = blockData["Min"][1].get<float>();
+			block->mLocalAABB.mMin.z = blockData["Min"][2].get<float>();
 			std::string path = kBlockModelPaths[block->mType];
 			if (path.length() > 0) {
-				block->mModel = manager->LoadModel(mDxCommon, kBlockModelPaths[block->mType]);
+				block->mModel = manager->LoadModel(kBlockModelPaths[block->mType]);
 			}
 			mBlocks.emplace_back(block);
 		}
@@ -67,7 +66,7 @@ void Map::Update(std::shared_ptr<Input> input) {
 		block->mType = mMapTypeForImGui;
 		std::string path = kBlockModelPaths[mMapTypeForImGui];
 		if (path.length() > 0) {
-			block->mModel = mMyGame->GetResourceManager()->LoadModel(mDxCommon, kBlockModelPaths[mMapTypeForImGui]);
+			block->mModel = mMyGame->GetResourceManager()->LoadModel(kBlockModelPaths[mMapTypeForImGui]);
 		}
 		block->mTransform.Create(mDxCommon);
 		mBlocks.emplace_back(block);
@@ -82,12 +81,12 @@ void Map::Update(std::shared_ptr<Input> input) {
 			ImGui::DragFloat3(std::format("Scale##{}", i).c_str(), &(*iter)->mTransform.mScale.x, 0.01f);
 			ImGui::DragFloat3(std::format("Rotate##{}", i).c_str(), &(*iter)->mTransform.mRotate.x, 0.01f);
 			ImGui::DragFloat3(std::format("Translate##{}", i).c_str(), &(*iter)->mTransform.mTranslate.x, 0.01f);
-			ImGui::DragFloat3(std::format("Max##{}", i).c_str(), &(*iter)->mAABB.mMax.x);
-			ImGui::DragFloat3(std::format("Min##{}", i).c_str(), &(*iter)->mAABB.mMin.x);
+			ImGui::DragFloat3(std::format("Max##{}", i).c_str(), &(*iter)->mLocalAABB.mMax.x);
+			ImGui::DragFloat3(std::format("Min##{}", i).c_str(), &(*iter)->mLocalAABB.mMin.x);
 			if (Combo(std::format("Type##{}", i).c_str(), (*iter)->mType)) {
 				std::string path = kBlockModelPaths[(*iter)->mType];
 				if (path.length() > 0) {
-					(*iter)->mModel = mMyGame->GetResourceManager()->LoadModel(mDxCommon, kBlockModelPaths[(*iter)->mType]);
+					(*iter)->mModel = mMyGame->GetResourceManager()->LoadModel(kBlockModelPaths[(*iter)->mType]);
 				}
 			}
 			if (ImGui::Button(std::format("Erase##{}", i).c_str())) {
@@ -110,6 +109,7 @@ void Map::Update(std::shared_ptr<Input> input) {
 	ImGui::End();
 
 	for (uint32_t i = 0; i < mBlocks.size(); ++i) {
+		mBlocks[i]->mWorldAABB = CalcWorldAABB(mBlocks[i]->mLocalAABB, mBlocks[i]->mTransform.mTranslate);
 		mBlocks[i]->mTransform.UpdateMatrix();
 	}
 }
@@ -140,12 +140,12 @@ void Map::Save(){
 		blockData["Translate"].push_back(mBlocks[i]->mTransform.mTranslate.x);
 		blockData["Translate"].push_back(mBlocks[i]->mTransform.mTranslate.y);
 		blockData["Translate"].push_back(mBlocks[i]->mTransform.mTranslate.z);
-		blockData["Max"].push_back(mBlocks[i]->mAABB.mMax.x);
-		blockData["Max"].push_back(mBlocks[i]->mAABB.mMax.y);
-		blockData["Max"].push_back(mBlocks[i]->mAABB.mMax.z);
-		blockData["Min"].push_back(mBlocks[i]->mAABB.mMin.x);
-		blockData["Min"].push_back(mBlocks[i]->mAABB.mMin.y);
-		blockData["Min"].push_back(mBlocks[i]->mAABB.mMin.z);
+		blockData["Max"].push_back(mBlocks[i]->mLocalAABB.mMax.x);
+		blockData["Max"].push_back(mBlocks[i]->mLocalAABB.mMax.y);
+		blockData["Max"].push_back(mBlocks[i]->mLocalAABB.mMax.z);
+		blockData["Min"].push_back(mBlocks[i]->mLocalAABB.mMin.x);
+		blockData["Min"].push_back(mBlocks[i]->mLocalAABB.mMin.y);
+		blockData["Min"].push_back(mBlocks[i]->mLocalAABB.mMin.z);
 	}
 	file << data.dump(4) << std::endl;
 }

@@ -6,10 +6,13 @@
 
 class DirectXCommon;
 struct Matrix4x4;
+class Input;
 
 class Camera{
 public:
-	void Initialize(std::shared_ptr<DirectXCommon> dxCommon);
+	virtual ~Camera();
+	void Initialize();
+	virtual void Update(std::shared_ptr<Input> input){}
 	//TransformのUpdateMatrixを呼び出してから
 	void UpdateMatrix();
 

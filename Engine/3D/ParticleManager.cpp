@@ -5,9 +5,9 @@
 #include "2D/Texture.h"
 #include "DirectXCommon.h"
 #include "Transform.h"
-#include "VertexData.h"
 #include "Material.h"
 #include "Math/Random.h"
+#include "3D/VertexData.h"
 #include "imgui/imgui.h"
 
 void ParticleManager::Create(std::shared_ptr<DirectXCommon> dxCommon, std::shared_ptr<Texture> texture) {
@@ -56,7 +56,7 @@ void ParticleManager::Create(std::shared_ptr<DirectXCommon> dxCommon, std::share
 
 	mMaterialResource = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(Material));
 	mMaterialResource->Map(0, nullptr, reinterpret_cast<void**>(&mMaterialData));
-	mMaterialData->color = { 1.0f,1.0f,1.0f,1.0f };
+	mMaterialData->mColor = { 1.0f,1.0f,1.0f,1.0f };
 
 	mEmitter.mCount = 3; //発生数
 	mEmitter.mFrequency = 0.5f; //0.5秒ごとに発生

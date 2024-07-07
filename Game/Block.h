@@ -8,16 +8,10 @@ class Model;
 struct AABB;
 
 struct Block {
-	AABB GetWorldAABB() {
-		AABB ret;
-		ret.mMax = mAABB.mMax + mTransform.mTranslate;
-		ret.mMin = mAABB.mMin + mTransform.mTranslate;
-		return ret;
-	}
-
 	std::string mName;
 	MapType mType;
 	Transform mTransform;
-	AABB mAABB;
+	AABB mLocalAABB;
+	AABB mWorldAABB;
 	std::shared_ptr<Model> mModel = nullptr;
 };

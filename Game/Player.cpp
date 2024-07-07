@@ -3,44 +3,54 @@
 #include "3D/Model.h"
 #include "2D/Texture.h"
 #include "3D/Camera.h"
-#include "3D/VertexData.h"
+#include "2D/Sprite.h"
+#include "PlayerCamera.h"
+#include "MyGame.h"
+#include "ResourceManager.h"
+#include "Math/MyMath.h"
 #include "Input/Input.h"
 #include "externals/imgui/imgui.h"
-#include "3D/ParticleManager.h"
-#include "2D/Sprite.h"
 #include <format>
 
 Player::Player(MyGame* myGame)
-	:GameObject(myGame)
-{
+	:GameObject(myGame) {
+
 }
 
-void Player::Initialize(DirectXCommon* dxCommon) {
-	mDxCommon = dxCommon;
-	mTransform = {
-		{1.0f,1.0f,1.0f}, //scale
-		{0.0f,0.0f,0.0f}, //rotate
-		{-25.0f,5.0f,-25.0f} //translate
-	};
-	mAABBtranslate = {
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f}
-	};
-	mTexture = new Texture();
-	mTexture->Create(mDxCommon, "resources/Model/Player/Chick/Atlas.png");
-	mModel = new Model();
-	mModel->Create(mDxCommon, "resources/Model/Player/Chick", "Chick.obj");
-	mModel->SetTexture(mTexture);
-	mSandsmokeParticle = std::make_unique<ParticleList>();
-	mSandsmokeParticle->Create(mDxCommon, "resources/Particle/SandSmoke.png");
-	mSandsmokeParticle->SetTranslateMin({ -1.0f,-1.0f,-1.0f });
-	mSandsmokeParticle->SetTranslateMax({ 1.0f,1.0f,1.0f });
-	mSandsmokeParticle->SetVelocityMin({ -5.0f,5.0f,-5.0f });
-	mSandsmokeParticle->SetVelocityMax({ 5.0f,6.0f,5.0f });
-	mSandsmokeParticle->SetLifeTImeMin(0.5f);
-	mSandsmokeParticle->SetLifeTimeMax(1.0f);
+void Player::Initialize() {
+	mTransform.Create(mMyGame->GetDxCommon());
+	//初期化
+	mTransform.mScale = { 0.25f,0.25f,0.25f };
+	mTransform.mRotate = { 0.0f,0.0f,0.0f };
+	mTransform.mTranslate = { 0.0f,5.0f,0.0f };
+	mVelocity = { 0.1f,0.0f,0.1f };
+	mGravity = 0.03f;
+	mIsEnemyHit = false;
+	mIsAttack = false;
+	mIsOperating = true;
+	mRotateSpeed = 0.05f;
+	mSpeed = 0.05f;
+	mHp = 2;
+	mForwardTimer = 5;
+	mBackTimer = 5;
+	mAttackCount = 0;
 
-	mSeedSprite.resize(5);
+	mLocalAABB.mMin = { -0.25f,-0.0f,-0.25f };
+	mLocalAABB.mMax = { 0.25f,0.25f,0.25f };
+	mWorldAABB = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+
+	mModel = mMyGame->GetResourceManager()->LoadModel("Resources/Models/Player/Chick.obj");
+	mModel->SetShadeType(ShadeType::PHONG);
+
+	mSandSmokeParticle = std::make_unique<ParticleManager>();
+	mSandSmokeParticle->SetInitTranslateMin({ -1.0f,-1.0f,-1.0f });
+	mSandSmokeParticle->SetInitTranslateMax({ 1.0f,1.0f,1.0f });
+	mSandSmokeParticle->SetInitVelocityMin({ -5.0f,5.0f,-5.0f });
+	mSandSmokeParticle->SetInitVelocityMax({ 5.0f,6.0f,5.0f });
+	mSandSmokeParticle->SetInitLifeTimeMin(0.5f);
+	mSandSmokeParticle->SetInitLifeTimeMax(1.0f);
+
+	/*mSeedSprite.resize(5);
 	for (uint32_t i = 0; i < mSeedSprite.size(); ++i) {
 		mSeedSprite[i] = std::make_unique<Sprite>();
 		mSeedSprite[i]->Create(dxCommon, "resources/Sprite/Ui/Seed/SeedSprite.png");
@@ -50,7 +60,7 @@ void Player::Initialize(DirectXCommon* dxCommon) {
 	for (int32_t i = 0; i < mHeartSprite.size(); ++i) {
 		mHeartSprite[i] = std::make_unique<Sprite>();
 		mHeartSprite[i]->Create(dxCommon, "resources/Sprite/Ui/Heart/Heart.png");
-	}
+	}*/
 
 	/*mFireParticle = std::make_unique<ParticleList>();
 	mFireParticle->Create(mDxCommon);
@@ -64,212 +74,134 @@ void Player::Initialize(DirectXCommon* dxCommon) {
 	mFireParticle->SetColorMin({ 1.0f,0.0f,0.0f });*/
 }
 
-void Player::Update(Input* input, float theta) {
-	mVelocity.y -= mGravity; //毎フレーム重力をかけている
-	if (mIsHit == true) { //地面に当たったら
-		mVelocity.y = 0.0f;
-	}
-	mTransform.translate.y += mVelocity.y;
-	for (uint32_t i = 0; i < mAttackTimes; ++i) {
+void Player::Update(std::shared_ptr<Input> input) {
+	mModel->Update();
+
+	/*for (uint32_t i = 0; i < mAttackCount; ++i) {
 		mSeedSprite[i]->SetTranslate({ 64.0f * i,80.0f,0.0f });
 		mSeedSprite[i]->Update();
 	}
 	for (int32_t i = 0; i < mHp; ++i) {
 		mHeartSprite[i]->SetTranslate({ 64.0f * i,10.0f,0.0f });
 		mHeartSprite[i]->Update();
-	}
+	}*/
 
-#ifdef _DEBUG
-	ImGui::Begin("Debug");
-	ImGui::DragFloat3("pos", &mTransform.translate.x);
-	ImGui::Text(std::format("{}", mVelocity.y).c_str());
-	ImGui::End();
-#endif // DEBUG
+	//Lスティック
+	Vector2 lStick = input->GetLStick();
+	//Rスティック
+	Vector2 rStick = input->GetRStick();
+	//回転行列
+	Matrix4x4 rotationMatrix = MakeRotateYMatrix(mCamera->GetRotate().y);
 
-	//読む！理解する！
-	//ここから
-	//3軸の回転行列を作成
-	Matrix4x4 rotationX = MakeRotateXMatrix(mTransform.rotate.x);
-	Matrix4x4 rotationY = MakeRotateYMatrix(mTransform.rotate.y);
-	Matrix4x4 rotationZ = MakeRotateZMatrix(mTransform.rotate.z);
-	//3軸の回転行列を1つの行列に結合
-	Matrix4x4 rotationMatrix = Multiply(rotationX, Multiply(rotationY, rotationZ));
-
-	//ビューの座標系を変換するための行列
-	//y軸回りの回転を行い、thetaとpi/2を引いた角度で回転
-	mTransposeViewMatrix = MakeRotateYMatrix(-theta - kPi / 2.0f);
-	//前方
-	Vector3 frontVec;
-	frontVec = { 0.0f,0.0f,mSpeed };
-	//右方向
-	Vector3 rightVec;
-	rightVec = { mSpeed,0.0f,0.0f };
+	Vector3 frontVec = { 0.0f,0.0f,1.0f };//前方
+	Vector3 rightVec = { 1.0f,0.0f,0.0f };//右方向
 	//2つのベクトルをそれぞれビュー行列で変換。ビューに対して前方と右方向のベクトルが求まる
-	frontVec = Multiply(frontVec, mTransposeViewMatrix);
-	rightVec = Multiply(rightVec, mTransposeViewMatrix);
+	frontVec = Multiply(frontVec, rotationMatrix);
+	rightVec = Multiply(rightVec, rotationMatrix);
 	//ここまで
 
-	//キーボード
-	if (mIsOperatable == true) {
-		if (input->PushKey(DIK_W)) {
-			mTransform.translate.x += frontVec.x;
-			mTransform.translate.y += frontVec.y;
-			mTransform.translate.z += frontVec.z;
-		}
-		if (input->PushKey(DIK_S)) {
-			mTransform.translate.x -= frontVec.x;
-			mTransform.translate.y -= frontVec.y;
-			mTransform.translate.z -= frontVec.z;
-		}
-		if (input->PushKey(DIK_A)) {
-			mTransform.translate.x -= rightVec.x;
-			mTransform.translate.y -= rightVec.y;
-			mTransform.translate.z -= rightVec.z;
-		}
-		if (input->PushKey(DIK_D)) {
-			mTransform.translate.x += rightVec.x;
-			mTransform.translate.y += rightVec.y;
-			mTransform.translate.z += rightVec.z;
-		}
-
+	if (mIsOperating) {
 		//ゲームパッド
-		//Lスティック
-		Vector2 lStick = input->GetLStick();
-		frontVec.x *= lStick.y;
-		frontVec.y *= lStick.y;
-		frontVec.z *= lStick.y;
-		rightVec.x *= lStick.x;
-		rightVec.y *= lStick.x;
-		rightVec.z *= lStick.x;
-		mTransform.translate.x += frontVec.x;
-		mTransform.translate.y += frontVec.y;
-		mTransform.translate.z += frontVec.z;
-		mTransform.translate.x += rightVec.x;
-		mTransform.translate.y += rightVec.y;
-		mTransform.translate.z += rightVec.z;
-		if (lStick.x >= 0.1f || lStick.y >= 0.1f) {
-			//パーティクル(砂煙)
-			mSandsmokeParticle->Update();
-			mSandsmokeParticle->SetEmitTransform({ {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{mTransform.translate.x,mTransform.translate.y,mTransform.translate.z} });
-			mSandsmokeParticle->SetParticleScale({ 2.0f,2.0f,2.0f });
-			mSandsmokeParticle->SetParticleTranslate({ 0.0f,5.0f,0.0f });
-			mSandsmokeParticle->SetVelocityMax({ 1.0f,4.0f,0.0f });
-			mSandsmokeParticle->SetVelocityMin({ 0.1f,4.0f,-1.0f });
-			mSandsmokeParticle->SetLifeTimeMax(0.5f);
-			mSandsmokeParticle->SetLifeTImeMin(0.2f);
-			mSandsmokeParticle->SetColorMax({ 116.0f / 255.0f,80.0f / 255.0f,48.0f / 255.0f });
-			mSandsmokeParticle->SetColorMin({ 116.0f / 255.0f,80.0f / 255.0f,48.0f / 255.0f });
-			mSandsmokeParticle->SetParticleScale({
-				mSandsmokeParticle->GetTransformInit().scale.x - 0.1f,
-				mSandsmokeParticle->GetTransformInit().scale.y - 0.1f,
-				mSandsmokeParticle->GetTransformInit().scale.z - 1.0f });
+		if (Length(lStick) >= 0.5f) {
+			frontVec *= lStick.y;
+			rightVec *= lStick.x;
+			mTransform.mTranslate += frontVec * mSpeed;
+			mTransform.mTranslate += rightVec * mSpeed;
+			//カメラの回転 + スティックの方向 + 90°
+			mTransform.mRotate.y = mCamera->GetRotate().y + atan2f(-lStick.y, lStick.x) + kPi / 2.0f;
 		}
 
-		//Rスティック
-		Vector2 rStick = input->GetRStick();
-		mTransform.rotate.y = -theta - kPi / 2.0f;
+		if (lStick.x >= 0.1f && lStick.y >= 0.1f) {
+			//パーティクル(砂煙)
+			mSandSmokeParticle->Update(mMyGame->GetCamera());
+			mSandSmokeParticle->SetEmitTranslate({ mTransform.mTranslate.x,mTransform.mTranslate.y,mTransform.mTranslate.z });
+			mSandSmokeParticle->SetInitVelocityMax({ 1.0f,4.0f,0.0f });
+			mSandSmokeParticle->SetInitVelocityMin({ 0.1f,4.0f,-1.0f });
+			mSandSmokeParticle->SetInitLifeTimeMax(0.5f);
+			mSandSmokeParticle->SetInitLifeTimeMin(0.2f);
+			mSandSmokeParticle->SetInitColorMax({ 116.0f / 255.0f,80.0f / 255.0f,48.0f / 255.0f });
+			mSandSmokeParticle->SetInitColorMin({ 116.0f / 255.0f,80.0f / 255.0f,48.0f / 255.0f });
+		}
+
 
 		//Bボタン
 		if (input->GetButtonDown(XINPUT_GAMEPAD_B)) {
-			if (mAttackTimes > 0) {
+			if (mAttackCount > 0) {
 				mIsAttack = true;
-				--mAttackTimes;
+				--mAttackCount;
 			}
 		}
-		if (mIsAttack == true && mProgressTimer > 0) {
-			--mProgressTimer;
+		if (mIsAttack == true && mForwardTimer > 0) {
+			--mForwardTimer;
 			Vector3 frontVec;
 			frontVec = { 0.0f,0.0f,1.0f };
-			frontVec = Multiply(frontVec, MakeRotateYMatrix(mTransform.rotate.y));
-			mTransform.translate += frontVec;
-		} else if (mIsAttack == true && mProgressTimer <= 0) {
+			frontVec = Multiply(frontVec, MakeRotateYMatrix(mTransform.mRotate.y));
+			mTransform.mTranslate += frontVec;
+		} else if (mIsAttack == true && mForwardTimer <= 0) {
 			Vector3 frontVec;
 			frontVec = { 0.0f,0.0f,1.0f };
-			frontVec = Multiply(frontVec, MakeRotateYMatrix(mTransform.rotate.y));
-			mTransform.translate -= frontVec;
+			frontVec = Multiply(frontVec, MakeRotateYMatrix(mTransform.mRotate.y));
+			mTransform.mTranslate -= frontVec;
 			--mBackTimer;
 			if (mBackTimer <= 0) {
 				mIsAttack = false;
-				mProgressTimer = 5;
+				mForwardTimer = 5;
 				mBackTimer = 5;
 			}
 		}
 	}
 
-	mTransform.UpdateMatrix();
-	Vector3 worldPos = GetWorldPosition();
-	mAABBtranslate = CalculateAABB(worldPos);
-	//リスポーン
-	if (mTransform.translate.y <= -50.0f) {
-		Initialize(mDxCommon);
+	mVelocity.y -= mGravity; //毎フレーム重力をかけている
+	if (ｍIsGround) { //地面に当たったら
+		mVelocity.y = 0.0f;
 	}
+	mTransform.mTranslate.y += mVelocity.y;
+	//リスポーン
+	if (mTransform.mTranslate.y <= -50.0f) {
+		Initialize();
+	}
+
+	mWorldAABB = CalcWorldAABB(mLocalAABB, mTransform.mTranslate);
 
 	//敵と当たっているとき
 	if (mIsEnemyHit == true) {
-		--mInvincibleTime;
-		if (mInvincibleTime <= 0) {
+		--mInvincibleTimer;
+		if (mInvincibleTimer <= 0) {
 			mIsEnemyHit = false;
-			mInvincibleTime = 120;
+			mInvincibleTimer = 120;
 		}
 	}
 
-#ifdef _DEBUG
-	ImGui::Begin("Debug");
-	ImGui::DragFloat3("player Position", &mTransform.translate.x, 0.01f);
-	ImGui::DragFloat3("player Rotation", &mTransform.rotate.x, 0.01f);
-	ImGui::End();
-#endif // DEBUG
+	//#ifdef _DEBUG
+	//	ImGui::Begin("Debug");
+	//	ImGui::DragFloat3("player Position", &mTransform.mTranslate.x, 0.01f);
+	//	ImGui::DragFloat3("player Rotation", &mTransform.mRotate.x, 0.01f);
+	//	ImGui::End();
+	//#endif // DEBUG
 
-	//mFireParticle->DrawImGui();
+		//mFireParticle->DrawImGui();
 
-	/*if (mAttackTimes > 0) {
-		mFireParticle->Update();
-		mFireParticle->SetEmitTransform({ {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{mTransform.translate.x,mTransform.translate.y,mTransform.translate.z} });
-	}*/
+		/*if (mAttackTimes > 0) {
+			mFireParticle->Update();
+			mFireParticle->SetEmitTransform({ {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{mTransform.translate.x,mTransform.translate.y,mTransform.translate.z} });
+		}*/
 }
 
-void Player::Draw(ID3D12GraphicsCommandList* commandList, Camera* camera) {
-	mLightList->SetSpotLightPos(mTransform.translate);
-	Matrix4x4 rotationX = MakeRotateXMatrix(mTransform.rotate.x);
-	Matrix4x4 rotationY = MakeRotateYMatrix(mTransform.rotate.y);
-	Matrix4x4 rotationZ = MakeRotateZMatrix(mTransform.rotate.z);
-	Matrix4x4 rotationMatrix = Multiply(rotationX, Multiply(rotationY, rotationZ));
-	Vector3 frontVec;
-	frontVec = { 0.0f,0.0f,1.0f };
-	frontVec = Multiply(frontVec, rotationMatrix);
-	mLightList->SetSpotLightDirection(frontVec);
-
-	mTexture->Bind(commandList);
-	if ((mInvincibleTime / 5) % 2 == 0) {
-		mModel->Draw(commandList, camera, mTransform);
+void Player::DrawModel(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {
+	if ((mInvincibleTimer / 5) % 2 == 0) {
+		mModel->Draw(commandList, mTransform);
 	}
 }
 
-void Player::SpriteDraw(ID3D12GraphicsCommandList* commandList) {
-	for (uint32_t i = 0; i < mAttackTimes; ++i) {
+void Player::DrawSprite(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {
+	/*for (uint32_t i = 0; i < mAttackCount; ++i) {
 		mSeedSprite[i]->Draw(commandList);
 	}
 	for (int32_t i = 0; i < mHp; ++i) {
 		mHeartSprite[i]->Draw(commandList);
-	}
+	}*/
 }
 
-void Player::ParticleDraw(ID3D12GraphicsCommandList* commandList, Camera* camera) {
-	mSandsmokeParticle->Draw(commandList, camera);
-	//mFireParticle->Draw(commandList, camera);
-}
-
-AABB Player::CalculateAABB(const Vector3& translate) {
-	AABB ret;
-	ret.min = {
-		{translate.x - (2.0f / 2.0f)},
-		{translate.y - (2.0f / 2.0f)},
-		{translate.z - (2.0f / 2.0f)}
-	};
-	ret.max = {
-		{translate.x + (2.0f / 2.0f)},
-		{translate.y + (2.0f / 2.0f)},
-		{translate.z + (2.0f / 2.0f)}
-	};
-	return ret;
+void Player::ParticleDraw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {
+	mSandSmokeParticle->Draw(commandList);
 }

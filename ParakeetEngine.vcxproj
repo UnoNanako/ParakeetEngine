@@ -98,6 +98,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\PlayerCamera.cpp" />
     <ClCompile Include="Engine\3D\Camera.cpp" />
     <ClCompile Include="Engine\DirectXCommon.cpp" />
     <ClCompile Include="Externals\imgui\imgui.cpp" />
@@ -115,6 +116,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Logger.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\ImGuiManager.cpp" />
+    <ClCompile Include="Game\Ladder.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\WinApp.cpp" />
     <ClCompile Include="Engine\2D\SpriteCommon.cpp" />
@@ -133,8 +135,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\ParticleManager.cpp" />
     <ClCompile Include="Engine\Math\Random.cpp" />
     <ClCompile Include="Game\Player.cpp" />
+    <ClCompile Include="Engine\Math\Matrix4x4.cpp" />
+    <ClCompile Include="Engine\Math\Vector2.cpp" />
+    <ClCompile Include="Engine\Math\Vector3.cpp" />
+    <ClCompile Include="Engine\Math\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\PlayerCamera.h" />
     <ClInclude Include="Game\Block.h" />
     <ClInclude Include="Engine\3D\Camera.h" />
     <ClInclude Include="Engine\DirectXCommon.h" />
@@ -173,12 +180,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Math\Quaternion.h" />
     <ClInclude Include="Engine\Math\Matrix3x3.h" />
     <ClInclude Include="Game\Map.h" />
-    <ClInclude Include="Engine\3D\VertexData.h" />
     <ClInclude Include="Engine\3D\ParticleCommon.h" />
     <ClInclude Include="Engine\3D\ParticleManager.h" />
     <ClInclude Include="Engine\3D\Particle.h" />
     <ClInclude Include="Engine\Math\Random.h" />
     <ClInclude Include="Game\Player.h" />
+    <ClInclude Include="Engine\3D\VertexData.h" />
+    <ClInclude Include="Game\Ladder.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Externals\imgui\LICENSE.txt" />

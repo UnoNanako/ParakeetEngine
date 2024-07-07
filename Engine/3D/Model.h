@@ -3,6 +3,7 @@
 #include "2D/Texture.h"
 #include "Material.h"
 #include "Math/Quaternion.h"
+#include "VertexData.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -14,20 +15,12 @@
 
 class DirectXCommon;
 class Quaternion;
-struct VertexData;
 
 //ノード
 struct Node {
 	Matrix4x4 mLocalMatrix;
 	std::string mName;
 	std::vector<Node> mChildren;
-};
-
-//頂点データ
-struct VertexData {
-	Vector4 mPosition;
-	Vector2 mTexcoord;
-	Vector3 mNormal;
 };
 
 //モデルデータ
@@ -72,6 +65,8 @@ public:
 
 	//Animationを解析する関数
 	Animation LoadAnimation(const std::string& filePath);
+	//ランバートかフォンかをセットする
+	void SetShadeType(ShadeType shadeType) { mShadeType = shadeType; }
 	
 private:
 	//glTFを読む関数
@@ -99,5 +94,6 @@ private:
 	Animation mAnimation;
 	float mAnimationTime = 0.0f;
 	bool mIsLoop = false; //アニメーションがループしているか
+	ShadeType mShadeType = LAMBERT; //ランバートかフォンかを入れるメンバ
 };
 

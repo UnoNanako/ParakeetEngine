@@ -1,8 +1,8 @@
 #include "Sprite.h"
 #include "DirectXCommon.h"
 #include "Transform.h"
-#include "3D/VertexData.h"
 #include "Math/MyMath.h"
+#include "3D/VertexData.h"
 #include <Windows.h>
 
 void Sprite::Create(std::shared_ptr<DirectXCommon> dxCommon, std::shared_ptr<Texture> texture){

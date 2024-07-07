@@ -20,11 +20,11 @@ public:
 	Vector3 mRotate = { 0.0f,0.0f,0.0f };
 	Vector3 mTranslate = { 0.0f,0.0f,0.0f };
 	//親となるワールド変換へのポインタ
+	//ローカル→ワールド変換行列
+	Matrix4x4 mMatWorld;
 	std::shared_ptr<Transform> mParent = nullptr;
 
 private:
-	//ローカル→ワールド変換行列
-	Matrix4x4 mMatWorld;
 	Microsoft::WRL::ComPtr<ID3D12Resource> mWorldMatrixResource;
 	Matrix4x4* mWorldMatrixData;
 };
