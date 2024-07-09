@@ -14,8 +14,8 @@ struct VertexData;
 
 class GameObject {
 public:
-	virtual ~GameObject();
 	GameObject(MyGame* myGame);
+	virtual ~GameObject();
 	virtual void Initialize() {}
 	virtual void Update(std::shared_ptr<Input> input) {}
 	virtual void DrawModel(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {}

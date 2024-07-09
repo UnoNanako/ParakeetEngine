@@ -19,6 +19,7 @@ public:
 	/// </summary>
 	Matrix4x4 GetViewMatrix() { return mViewMatrix; }
 	void SetPlayer(std::shared_ptr<Player> player) { mPlayer = player; }
+	void SetIsFixed(bool isFixed) { mIsFixed = isFixed; }
 
 private:
 	std::shared_ptr<Player> mPlayer;

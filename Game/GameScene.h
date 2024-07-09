@@ -9,7 +9,12 @@ class DirectXCommon;
 class Input;
 class Map;
 class Player;
+class Ghost;
+class WalkEnemy;
+class RotateEnemy;
 class Ladder;
+class Crank;
+class Seed;
 
 class GameScene{
 public:
@@ -25,8 +30,15 @@ public:
 private:
 	MyGame* mMyGame;
 	std::shared_ptr<Map> mMap;
+	//-----プレイヤー-----
 	std::shared_ptr<Player> mPlayer;
+	//-----敵-----
+	std::shared_ptr<Ghost> mGhost;
+	std::shared_ptr<RotateEnemy> mRotateEnemy;
+	std::vector<std::shared_ptr<WalkEnemy>> mWalkEnemies;
+	//-----オブジェクト-----
+	std::shared_ptr<Crank> mCrank;
 	std::vector<std::shared_ptr<Ladder>> mLadders;
-
+	std::vector<std::shared_ptr<Seed>> mSeeds;
 };
 

@@ -39,6 +39,7 @@ void Ladder::DrawModel(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> command
 		mTransform2.mTranslate.x = mTransform.mTranslate.x;
 		mTransform2.mTranslate.y = mTransform.mTranslate.y + 1.0f;
 		mTransform2.mTranslate.z = mTransform.mTranslate.z;
+		mTransform2.mRotate = mTransform.mRotate;
 		mTransform2.UpdateMatrix();
 		mModel->Draw(commandList, mTransform2);
 	}
@@ -46,6 +47,7 @@ void Ladder::DrawModel(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> command
 		mTransform3.mTranslate.x = mTransform.mTranslate.x;
 		mTransform3.mTranslate.y = mTransform.mTranslate.y + 2.0f;
 		mTransform3.mTranslate.z = mTransform.mTranslate.z;
+		mTransform3.mRotate = mTransform.mRotate;
 		mTransform3.UpdateMatrix();
 		mModel->Draw(commandList, mTransform3);
 	}
@@ -67,3 +69,4 @@ void Ladder::SetDirection(Direction direction) {
 		break;
 	}
 }
+

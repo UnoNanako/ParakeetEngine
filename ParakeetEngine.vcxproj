@@ -98,6 +98,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\Crank.cpp" />
     <ClCompile Include="Game\PlayerCamera.cpp" />
     <ClCompile Include="Engine\3D\Camera.cpp" />
     <ClCompile Include="Engine\DirectXCommon.cpp" />
@@ -117,6 +118,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\ImGuiManager.cpp" />
     <ClCompile Include="Game\Ladder.cpp" />
+    <ClCompile Include="Game\Ghost.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\WinApp.cpp" />
     <ClCompile Include="Engine\2D\SpriteCommon.cpp" />
@@ -139,8 +141,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Math\Vector2.cpp" />
     <ClCompile Include="Engine\Math\Vector3.cpp" />
     <ClCompile Include="Engine\Math\Vector4.cpp" />
+    <ClCompile Include="Game\WalkEnemy.cpp" />
+    <ClCompile Include="Game\RotateEnemy.cpp" />
+    <ClCompile Include="Game\Seed.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\Crank.h" />
     <ClInclude Include="Game\PlayerCamera.h" />
     <ClInclude Include="Game\Block.h" />
     <ClInclude Include="Engine\3D\Camera.h" />
@@ -187,6 +193,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Engine\3D\VertexData.h" />
     <ClInclude Include="Game\Ladder.h" />
+    <ClInclude Include="Game\Ghost.h" />
+    <ClInclude Include="Game\WalkEnemy.h" />
+    <ClInclude Include="Game\RotateEnemy.h" />
+    <ClInclude Include="Game\Seed.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Externals\imgui\LICENSE.txt" />

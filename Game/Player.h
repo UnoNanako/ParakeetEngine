@@ -31,7 +31,7 @@ public:
 	void SetIsGround(bool isMapHit) { ｍIsGround = isMapHit; }
 	void SetVelocityY(float y) { mVelocity.y = y; }
 	void SetGravity(float gravity) { mGravity = gravity; }
-	void SetAttackTimes(uint32_t attackCount) { mAttackCount = attackCount; }
+	void SetAttackCount(uint32_t attackCount) { mAttackCount = attackCount; }
 	void SetCamera(std::shared_ptr<PlayerCamera> camera) { mCamera = camera; }
 
 private:

@@ -22,7 +22,7 @@ void Player::Initialize() {
 	//初期化
 	mTransform.mScale = { 0.25f,0.25f,0.25f };
 	mTransform.mRotate = { 0.0f,0.0f,0.0f };
-	mTransform.mTranslate = { 0.0f,5.0f,0.0f };
+	mTransform.mTranslate = { -5.0f,5.0f,-4.5f };
 	mVelocity = { 0.1f,0.0f,0.1f };
 	mGravity = 0.03f;
 	mIsEnemyHit = false;
@@ -134,12 +134,12 @@ void Player::Update(std::shared_ptr<Input> input) {
 		if (mIsAttack == true && mForwardTimer > 0) {
 			--mForwardTimer;
 			Vector3 frontVec;
-			frontVec = { 0.0f,0.0f,1.0f };
+			frontVec = { 0.0f,0.0f,0.5f };
 			frontVec = Multiply(frontVec, MakeRotateYMatrix(mTransform.mRotate.y));
 			mTransform.mTranslate += frontVec;
 		} else if (mIsAttack == true && mForwardTimer <= 0) {
 			Vector3 frontVec;
-			frontVec = { 0.0f,0.0f,1.0f };
+			frontVec = { 0.0f,0.0f,0.5f };
 			frontVec = Multiply(frontVec, MakeRotateYMatrix(mTransform.mRotate.y));
 			mTransform.mTranslate -= frontVec;
 			--mBackTimer;
