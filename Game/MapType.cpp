@@ -9,5 +9,6 @@ std::map<MapType, std::string> kBlockModelPaths = {
 	{MapType::HOUSE2,"Resources/Models/House2/House2.obj"},
 	{MapType::FENCE,"Resources/Models/Fence/Fence.gltf"},
 	{MapType::BRIDGE,"Resources/Models/MiniBridge/MiniBridge.gltf"},
-	{MapType::FLOWER,"Resources/Models/Box1x1_Flower/Box1x1_Flower.gltf"}
+	{MapType::FLOWER,"Resources/Models/Box1x1_Flower/Box1x1_Flower.gltf"},
+	{MapType::BUSH,"Resources/Models/Bush/Bush.obj"}
 };

@@ -35,7 +35,7 @@ void GameScene::Initialize() {
 	mRotateEnemy = std::make_shared<RotateEnemy>(mMyGame);
 	mRotateEnemy->Initialize();
 	mRotateEnemy->SetPlayer(mPlayer);
-	mWalkEnemies.resize(4);
+	mWalkEnemies.resize(6);
 	for (uint32_t i = 0; i < mWalkEnemies.size(); ++i) {
 		mWalkEnemies[i] = std::make_shared<WalkEnemy>(mMyGame);
 		mWalkEnemies[i]->Initialize();
@@ -56,6 +56,14 @@ void GameScene::Initialize() {
 	mWalkEnemies[3]->SetMoveMin({ 0.0f,0.0f,19.5f });
 	mWalkEnemies[3]->SetMoveMax({ 5.5f,0.0f,25.0f });
 	mWalkEnemies[3]->SetDirection(WalkEnemy::DOWN);
+	mWalkEnemies[4]->SetTranslate({ -2.0f,1.0f,28.0f });
+	mWalkEnemies[4]->SetMoveMin({ -5.0f,0.0f,26.0f });
+	mWalkEnemies[4]->SetMoveMax({ -2.0f,0.0f,28.0f });
+	mWalkEnemies[4]->SetDirection(WalkEnemy::DOWN);
+	mWalkEnemies[5]->SetTranslate({ -5.0f,1.0f,26.0f });
+	mWalkEnemies[5]->SetMoveMin({ -5.0f,0.0f,26.0f });
+	mWalkEnemies[5]->SetMoveMax({ -2.0f,0.0f,28.0f });
+	mWalkEnemies[5]->SetDirection(WalkEnemy::UP);
 	//-----オブジェクト-----
 	mCrank = std::make_shared<Crank>(mMyGame);
 	mCrank->Initialize();

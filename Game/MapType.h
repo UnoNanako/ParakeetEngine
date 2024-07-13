@@ -12,7 +12,8 @@ enum MapType : unsigned int {
 	HOUSE2,
 	FENCE,
 	BRIDGE,
-	FLOWER
+	FLOWER,
+	BUSH
 };
 
 extern std::map<MapType, std::string> kBlockModelPaths;
