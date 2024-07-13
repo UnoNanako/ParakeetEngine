@@ -13,16 +13,18 @@ Seed::Seed(MyGame* myGame)
 }
 
 void Seed::Initialize(){
-	mTransform.mScale = { 0.1f,0.1f,0.1f };
+	mTransform.mScale = { 1.0f,1.0f,1.0f };
 	mTransform.mRotate = { 0.0f,0.0f,0.0f };
-	mTransform.mTranslate = { 0.0f,0.0f,0.0f };
+	mTransform.mTranslate = { 0.0f,0.5f,0.0f };
 	mTransform.Create(mMyGame->GetDxCommon());
-	mModel = mMyGame->GetResourceManager()->LoadModel("Resources/Models/Seed/Seed.obj");
+	mModel = mMyGame->GetResourceManager()->LoadModel("Resources/Models/Seed/Seed.gltf");
+	mIsHit = false;
 }
 
 void Seed::Update(std::shared_ptr<Input> input){
-	mLocalAABB.mMin = { -0.1f,-0.1f,-0.1f };
-	mLocalAABB.mMax = { 0.1f,0.1f,0.1f };
+	mTransform.mRotate.y += 0.05f;
+	mLocalAABB.mMin = { -0.5f,-0.5f,-0.5f };
+	mLocalAABB.mMax = { 0.5f,0.5f,0.5f };
 	mWorldAABB = CalcWorldAABB(mLocalAABB, mTransform.mTranslate);
 	mTransform.UpdateMatrix();
 }

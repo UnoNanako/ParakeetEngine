@@ -10,6 +10,13 @@
 #include "Game/Ladder.h"
 #include "Game/Crank.h"
 #include "Game/Seed.h"
+#include "Game/RotateBridge.h"
+#include "Game/Gem.h"
+#include "Game/Star.h"
+#include "Game/Skydome.h"
+#include "2D/Sprite.h"
+#include "ResourceManager.h"
+#include "Math/Easing.h"
 
 GameScene::GameScene(MyGame* myGame) {
 	mMyGame = myGame;
@@ -28,7 +35,7 @@ void GameScene::Initialize() {
 	mRotateEnemy = std::make_shared<RotateEnemy>(mMyGame);
 	mRotateEnemy->Initialize();
 	mRotateEnemy->SetPlayer(mPlayer);
-	mWalkEnemies.resize(3);
+	mWalkEnemies.resize(4);
 	for (uint32_t i = 0; i < mWalkEnemies.size(); ++i) {
 		mWalkEnemies[i] = std::make_shared<WalkEnemy>(mMyGame);
 		mWalkEnemies[i]->Initialize();
@@ -45,10 +52,14 @@ void GameScene::Initialize() {
 	mWalkEnemies[2]->SetMoveMin({ 0.5f,0.0f,-1.0f });
 	mWalkEnemies[2]->SetMoveMax({ 5.5f,0.0f,1.0f });
 	mWalkEnemies[2]->SetDirection(WalkEnemy::LEFT);
+	mWalkEnemies[3]->SetTranslate({ 5.5f,0.0f,24.5f });
+	mWalkEnemies[3]->SetMoveMin({ 0.0f,0.0f,19.5f });
+	mWalkEnemies[3]->SetMoveMax({ 5.5f,0.0f,25.0f });
+	mWalkEnemies[3]->SetDirection(WalkEnemy::DOWN);
 	//-----オブジェクト-----
 	mCrank = std::make_shared<Crank>(mMyGame);
 	mCrank->Initialize();
-	mLadders.resize(3);
+	mLadders.resize(8);
 	for (uint32_t i = 0; i < mLadders.size(); ++i) {
 		mLadders[i] = std::make_shared<Ladder>(mMyGame);
 		mLadders[i]->Initialize();
@@ -63,12 +74,62 @@ void GameScene::Initialize() {
 	mLadders[2]->SetTranslate({ 3.0f,0.0f,5.0f });
 	mLadders[2]->SetHeight(1);
 	mLadders[2]->SetDirection(Ladder::FRONT);
+	mLadders[3]->SetTranslate({ 3.0f,0.0f,19.0f });
+	mLadders[3]->SetHeight(1);
+	mLadders[3]->SetDirection(Ladder::BACK);
+	mLadders[4]->SetTranslate({ -0.75f,0.0f,28.0f });
+	mLadders[4]->SetHeight(1);
+	mLadders[4]->SetRotate({ 0.0f,-kPi / 2.0f,0.0f });
+	mLadders[4]->SetDirection(Ladder::RIGHT);
+	mLadders[5]->SetTranslate({ 4.75f,0.0f,22.25f });
+	mLadders[5]->SetHeight(3);
+	mLadders[5]->SetRotate({ 0.0f,-kPi / 2.0f,0.0f });
+	mLadders[5]->SetDirection(Ladder::RIGHT);
+	mLadders[6]->SetTranslate({ -3.25f,1.0f,24.25f });
+	mLadders[6]->SetHeight(2);
+	mLadders[6]->SetDirection(Ladder::BACK);
+	mLadders[7]->SetTranslate({ -3.25f,3.0f,23.0f });
+	mLadders[7]->SetHeight(2);
+	mLadders[7]->SetDirection(Ladder::BACK);
 	mSeeds.resize(1);
 	for (uint32_t i = 0; i < mSeeds.size(); ++i) {
 		mSeeds[i] = std::make_shared<Seed>(mMyGame);
 		mSeeds[i]->Initialize();
 	}
-	mSeeds[0]->SetTranslate({ -0.5f,0.2f,4.0f });
+	mSeeds[0]->SetTranslate({ -0.5f,0.5f,4.0f });
+	mRotateBridge = std::make_shared<RotateBridge>(mMyGame);
+	mRotateBridge->Initialize();
+	mRotateBridge->SetCrank(mCrank);
+	mGems.resize(3);
+	for (uint32_t i = 0; i < mGems.size(); ++i) {
+		mGems[i] = std::make_shared<Gem>(mMyGame);
+		mGems[i]->Initialize();
+		mGems[i]->SetSpriteTranslate({ (1088.0f + i * 64.0f),10.0f,0.0f });
+	}
+	mGems[0]->SetTranslate({ 5.5f,1.5f,-5.0f });
+	mGems[1]->SetTranslate({ 3.5f,0.5f,22.0f });
+	mGems[2]->SetTranslate({ -3.25f,3.5f,19.75f });
+	mStar = std::make_shared<Star>(mMyGame);
+	mStar ->Initialize();
+	mSkydome = std::make_shared<Skydome>(mMyGame);
+	mSkydome->Initialize();
+	//-----スプライト-----
+	mNowLoading = std::make_shared<Sprite>();
+	mNowLoading->Create(mMyGame->GetDxCommon(), mMyGame->GetResourceManager()->LoadTexture("Resources/Sprites/NowLoading.png"));
+	mNowLoadingTransform.mScale = { 1.0f,1.0f,1.0f };
+	mNowLoadingTransform.mRotate = { 0.0f,0.0f,0.0f };
+	mNowLoadingTransform.mTranslate = { -1280.0f,0.0f,0.0f };
+	mNowLoadingTransform.Create(mMyGame->GetDxCommon());
+
+	//イージング
+	mInStart = { -1280.0f,0.0f,0.0f };
+	mInEnd = { 0.0f,0.0f,0.0f };
+	mOutStart = { 0.0f,0.0f,0.0f };
+	mOutEnd = { 1280.0f,0.0f,0.0f };
+	mInT = 0.0f;
+	mOutT = 1.0f;
+
+	mIsTitleScene = true;
 }
 
 void GameScene::Finalize() {
@@ -76,6 +137,121 @@ void GameScene::Finalize() {
 }
 
 void GameScene::Update(std::shared_ptr<Input> input) {
+	switch (mScene) {
+	case GAME:
+		mIsTransition = false;
+		//NowLoadingイージング処理
+		mOutT += 0.05f;
+		if (mOutT >= 1.0f) {
+			mOutT = 1.0f;
+			if (input->GetButton(XINPUT_GAMEPAD_A) || input->PushKey(DIK_SPACE)) {
+				mIsTitleScene = false;
+				mPlayer->SetIsOperatable(true);
+			}
+		}
+		mNowLoadingTransform.mTranslate = Leap(mOutStart, mOutEnd, Easing::EaseInOutCubic(mOutT));
+		mNowLoadingTransform.UpdateMatrix();
+		mMyGame->GetCamera()->SetIsTitleScene(mIsTitleScene);
+		UpdateObject(input);
+		UpdateCollision(input);
+		if (mPlayer->GetHp() == 0) {
+			mScene = OVER;
+		}
+		if (mStar->GetIsPlayerHit()) {
+			mScene = CLEAR;
+		}
+		break;
+
+	case CLEAR:
+		if (input->GetButton(XINPUT_GAMEPAD_A) || input->PushKey(DIK_SPACE)) {
+			mIsTransition = true;
+		}
+		//NowLoadingイージング処理
+		if (mIsTransition) {
+			mInT += 0.05f;
+			if (mInT >= 1.0f) {
+				mInT = 1.0f;
+				mIsTitleScene = true;
+				GameInit();
+				mScene = GAME;
+				mOutT = 0.0f;
+				mNowLoadingTransform.mTranslate = Leap(mOutStart, mOutEnd, Easing::EaseInOutCubic(mOutT));
+				mNowLoadingTransform.UpdateMatrix();
+			} else {
+				mNowLoadingTransform.mTranslate = Leap(mInStart, mOutEnd, Easing::EaseInOutCubic(mOutT));
+				mNowLoadingTransform.UpdateMatrix();
+			}
+		}
+		break;
+
+	case OVER:
+		if (input->GetButton(XINPUT_GAMEPAD_A) || input->PushKey(DIK_SPACE)) {
+			mIsTransition = true;
+		}
+		if (mIsTransition) {
+			mInT += 0.05f;
+			if (mInT >= 1.0f) {
+				mInT = 1.0f;
+				mIsTitleScene = true;
+				GameInit();
+				mScene = GAME;
+				mOutT = 0.0f;
+				mNowLoadingTransform.mTranslate = Leap(mOutStart, mOutEnd, Easing::EaseInOutCubic(mOutT));
+				mNowLoadingTransform.UpdateMatrix();
+			} else {
+				mNowLoadingTransform.mTranslate = Leap(mInStart, mInEnd, Easing::EaseInOutCubic(mInT));
+				mNowLoadingTransform.UpdateMatrix();
+			}
+		}
+		break;
+	}
+}
+
+void GameScene::DrawModel(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {
+	mMap->DrawModel(commandList);
+	//-----プレイヤー-----
+	mPlayer->DrawModel(commandList);
+	//-----敵-----
+	mGhost->DrawModel(commandList);
+	mRotateEnemy->DrawModel(commandList);
+	for (uint32_t i = 0; i < mWalkEnemies.size(); ++i) {
+		mWalkEnemies[i]->DrawModel(commandList);
+	}
+	//-----オブジェクト-----
+	mCrank->DrawModel(commandList);
+	for (uint32_t i = 0; i < mLadders.size(); ++i) {
+		mLadders[i]->DrawModel(commandList);
+	}
+	for (uint32_t i = 0; i < mSeeds.size(); ++i) {
+		mSeeds[i]->DrawModel(commandList);
+	}
+	mRotateBridge->DrawModel(commandList);
+	for (uint32_t i = 0; i < mGems.size(); ++i) {
+		mGems[i]->DrawModel(commandList);
+	}
+	mStar->DrawModel(commandList);
+	mSkydome->DrawModel(commandList);
+}
+
+void GameScene::DrawSprite(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {
+	//-----プレイヤー-----
+	mPlayer->DrawSprite(commandList);
+	//-----オブジェクト-----
+	mCrank->DrawSprite(commandList);
+	for (uint32_t i = 0; i < mGems.size(); ++i) {
+		mGems[i]->DrawSprite(commandList);
+	}
+	mNowLoading->Draw(commandList,mNowLoadingTransform);
+}
+
+void GameScene::DrawParticle(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList){
+	mPlayer->DrawParticle(commandList);
+	for (uint32_t i = 0; i < mGems.size(); ++i) {
+		mGems[i]->DrawParticle(commandList);
+	}
+}
+
+void GameScene::UpdateObject(std::shared_ptr<Input> input){
 	mMap->Update(input);
 	//-----プレイヤー-----
 	mPlayer->Update(input);
@@ -93,6 +269,15 @@ void GameScene::Update(std::shared_ptr<Input> input) {
 	for (uint32_t i = 0; i < mSeeds.size(); ++i) {
 		mSeeds[i]->Update(input);
 	}
+	mRotateBridge->Update(input);
+	for (uint32_t i = 0; i < mGems.size(); ++i) {
+		mGems[i]->Update(input);
+	}
+	mStar->Update(input);
+	mSkydome->Update(input);
+}
+
+void GameScene::UpdateCollision(std::shared_ptr<Input> input){
 	//-----当たり判定-----
 	//衝突判定前の処理
 	CollisionResult collisionResult;
@@ -179,6 +364,26 @@ void GameScene::Update(std::shared_ptr<Input> input) {
 		mMyGame->GetCamera()->SetIsFixed(false);
 	}
 
+	//回転する橋とプレイヤー
+	if (IsCollision(mPlayer->GetAABB(), mRotateBridge->GetOBB(), collisionResult)) {
+		mPlayer->SetIsGround(true);
+		Vector3 pos = mPlayer->GetTranslate();
+		pos += collisionResult.normal * collisionResult.depth / 2;
+		mPlayer->SetTranslate(pos);
+	}
+	if (IsCollision(mPlayer->GetAABB(), mRotateBridge->GetSideLOBB(), collisionResult)) {
+		mPlayer->SetIsGround(true);
+		Vector3 pos = mPlayer->GetTranslate();
+		pos += collisionResult.normal * collisionResult.depth / 2;
+		mPlayer->SetTranslate(pos);
+	}
+	if (IsCollision(mPlayer->GetAABB(), mRotateBridge->GetSideROBB(), collisionResult)) {
+		mPlayer->SetIsGround(true);
+		Vector3 pos = mPlayer->GetTranslate();
+		pos += collisionResult.normal * collisionResult.depth / 2;
+		mPlayer->SetTranslate(pos);
+	}
+
 	//種とプレイヤー
 	for (uint32_t i = 0; i < mSeeds.size(); ++i) {
 		if (IsCollision(mPlayer->GetAABB(), mSeeds[i]->GetWorldAABB(), collisionResult) && !mSeeds[i]->GetIsHit()) {
@@ -187,6 +392,18 @@ void GameScene::Update(std::shared_ptr<Input> input) {
 			}
 			mSeeds[i]->SetIsHit(true);
 		}
+	}
+
+	//ジェムとプレイヤー
+	for (uint32_t i = 0; i < mGems.size(); ++i) {
+		if (IsCollision(mPlayer->GetAABB(), mGems[i]->GetWorldAABB(), collisionResult)) {
+			mGems[i]->SetIsHit(true);
+		}
+	}
+
+	//スターとプレイヤー
+	if (IsCollision(mPlayer->GetAABB(), mStar->GetWorldAABB(), collisionResult)) {
+		mStar->SetIsPlayerHit(true);
 	}
 
 	bool isHitLadder = false;
@@ -262,29 +479,43 @@ void GameScene::Update(std::shared_ptr<Input> input) {
 	mPlayer->UpdateMatrix();
 }
 
-void GameScene::ModelDraw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {
-	mMap->DrawModel(commandList);
-	//-----プレイヤー-----
-	mPlayer->DrawModel(commandList);
-	//-----敵-----
-	mGhost->DrawModel(commandList);
-	mRotateEnemy->DrawModel(commandList);
-	for (uint32_t i = 0; i < mWalkEnemies.size(); ++i) {
-		mWalkEnemies[i]->DrawModel(commandList);
-	}
-	//-----オブジェクト-----
-	mCrank->DrawModel(commandList);
-	for (uint32_t i = 0; i < mLadders.size(); ++i) {
-		mLadders[i]->DrawModel(commandList);
-	}
-	for (uint32_t i = 0; i < mSeeds.size(); ++i) {
-		mSeeds[i]->DrawModel(commandList);
-	}
-}
+void GameScene::GameInit(){
 
-void GameScene::SpriteDraw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {
-	//-----プレイヤー-----
-	mPlayer->DrawSprite(commandList);
-	//-----オブジェクト-----
-	mCrank->DrawSprite(commandList);
+	mIsTitleScene = true;
+	mPlayer->Initialize();
+	mGhost->Initialize();
+	mRotateEnemy->Initialize();
+	for (uint32_t i = 0; i < mWalkEnemies.size(); ++i) {
+		mWalkEnemies[i]->Initialize();
+	}
+	mWalkEnemies[0]->SetTranslate({ -1.5f,0.0f,5.0f });
+	mWalkEnemies[0]->SetMoveMin({ -3.5f,0.0f,3.0f });
+	mWalkEnemies[0]->SetMoveMax({ -1.5f,0.0f,5.0f });
+	mWalkEnemies[0]->SetDirection(WalkEnemy::DOWN);
+	mWalkEnemies[1]->SetTranslate({ 4.5f,0.0f,-2.0f });
+	mWalkEnemies[1]->SetMoveMin({ 1.5f,0.0f,-5.0f });
+	mWalkEnemies[1]->SetMoveMax({ 4.5f,0.0f,-2.0f });
+	mWalkEnemies[1]->SetDirection(WalkEnemy::DOWN);
+	mWalkEnemies[2]->SetTranslate({ 5.5f,0.0f,-1.0f });
+	mWalkEnemies[2]->SetMoveMin({ 0.5f,0.0f,-1.0f });
+	mWalkEnemies[2]->SetMoveMax({ 5.5f,0.0f,1.0f });
+	mWalkEnemies[2]->SetDirection(WalkEnemy::LEFT);
+	mWalkEnemies[3]->SetTranslate({ 5.5f,0.0f,24.5f });
+	mWalkEnemies[3]->SetMoveMin({ 0.5f,0.0f,20.5f });
+	mWalkEnemies[3]->SetMoveMax({ 5.5f,0.0f,24.5f });
+	mWalkEnemies[3]->SetDirection(WalkEnemy::DOWN);
+	mCrank->Initialize(); 
+	for (uint32_t i = 0; i < mSeeds.size(); ++i) {
+		mSeeds[i]->Initialize();
+	}
+	mSeeds[0]->SetTranslate({ -0.5f,0.5f,4.0f });
+	mRotateBridge->Initialize();
+	for (uint32_t i = 0; i < mGems.size(); ++i) {
+		mGems[i]->Initialize();
+		mGems[i]->SetSpriteTranslate({ (1088.0f + i * 64.0f),10.0f,0.0f });
+	}
+	mGems[0]->SetTranslate({ 5.5f,1.5f,-5.0f });
+	mGems[1]->SetTranslate({ 3.5f,0.5f,22.0f });
+	mGems[2]->SetTranslate({ -3.25f,3.5f,19.75f });
+	mStar->Initialize();
 }

@@ -7,6 +7,7 @@
 #include <algorithm>
 
 PlayerCamera::PlayerCamera() {
+	mTranslate = { -4.25f,1.6f,-3.8f };
 	mOffset = { 0.0f,0.0f,-10.0f };
 	mRotate.x = kPi / 180.0f * 30.0f;
 	mActualRotate = mRotate;
@@ -14,6 +15,7 @@ PlayerCamera::PlayerCamera() {
 }
 
 void PlayerCamera::Update(std::shared_ptr<Input> input) {
+	if (!mIsTitleScene) {
 	if (!mIsFixed) {
 		//ゲームパッドの右スティックの入力を取得
 		Vector2 rStick = input->GetRStick();
@@ -39,7 +41,7 @@ void PlayerCamera::Update(std::shared_ptr<Input> input) {
 	mTranslate = mPlayer->GetTranslate() + offset;
 
 	//線形補間
-	/*if (!isTitleScene) {
+	/*
 		mT += 0.05f;
 		if (mT > 1.0f) {
 			mT = 1.0f;
@@ -53,8 +55,8 @@ void PlayerCamera::Update(std::shared_ptr<Input> input) {
 		tmp.z = mStartPos.z + (z - mStartPos.z) * mT;
 		mTransform.translate.x = tmp.x;
 		mTransform.translate.y = tmp.y;
-		mTransform.translate.z = tmp.z;
-	}*/
+		mTransform.translate.z = tmp.z;*/
+	}
 
 	Matrix4x4 worldMatrix = MakeAffineMatrix({ 1.0f,1.0f,1.0f }, mRotate, mTranslate);
 	mViewMatrix = Inverse(worldMatrix);

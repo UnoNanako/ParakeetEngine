@@ -24,6 +24,6 @@ private:
 	std::shared_ptr<Model> mModel;
 	AABB mLocalAABB;
 	AABB mWorldAABB;
-	bool mIsHit = false;
+	bool mIsHit;
 };
 

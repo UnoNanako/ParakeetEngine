@@ -41,6 +41,7 @@ public:
 	void SetInitColorMax(Vector3 colorMax) { mInitColorMax = colorMax; }
 	void SetInitLifeTimeMin(float lifeTimeMin) { mInitLifeTimeMin = lifeTimeMin; }
 	void SetInitLifeTimeMax(float lifeTimeMax) { mInitLifeTimeMax = lifeTimeMax; }
+	void SetInitScale(Vector3 scale) { mScale = scale; }
 
 private:
 	Particle MakeParticle(const Vector3& translate);
@@ -63,6 +64,7 @@ private:
 
 	bool mIsPlaying; //パーティクルが出ているか
 	Emitter mEmitter{};
+	Vector3 mScale;
 
 	//ランダム範囲の最小、最大
 	Vector3 mInitTranslateMin;

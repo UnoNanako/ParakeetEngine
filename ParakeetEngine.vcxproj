@@ -98,6 +98,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Math\Easing.cpp" />
     <ClCompile Include="Game\Crank.cpp" />
     <ClCompile Include="Game\PlayerCamera.cpp" />
     <ClCompile Include="Engine\3D\Camera.cpp" />
@@ -119,6 +120,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\ImGuiManager.cpp" />
     <ClCompile Include="Game\Ladder.cpp" />
     <ClCompile Include="Game\Ghost.cpp" />
+    <ClCompile Include="Game\Gem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\WinApp.cpp" />
     <ClCompile Include="Engine\2D\SpriteCommon.cpp" />
@@ -144,8 +146,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\WalkEnemy.cpp" />
     <ClCompile Include="Game\RotateEnemy.cpp" />
     <ClCompile Include="Game\Seed.cpp" />
+    <ClCompile Include="Game\RotateBridge.cpp" />
+    <ClCompile Include="Game\Star.cpp" />
+    <ClCompile Include="Game\Skydome.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Math\Easing.h" />
     <ClInclude Include="Game\Crank.h" />
     <ClInclude Include="Game\PlayerCamera.h" />
     <ClInclude Include="Game\Block.h" />
@@ -197,6 +203,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\WalkEnemy.h" />
     <ClInclude Include="Game\RotateEnemy.h" />
     <ClInclude Include="Game\Seed.h" />
+    <ClInclude Include="Game\RotateBridge.h" />
+    <ClInclude Include="Game\Gem.h" />
+    <ClInclude Include="Game\Star.h" />
+    <ClInclude Include="Game\Skydome.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Externals\imgui\LICENSE.txt" />

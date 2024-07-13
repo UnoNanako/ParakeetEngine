@@ -12,6 +12,7 @@ Map::Map(MyGame* myGame)
 
 void Map::Initialize() {
 	mDxCommon = mMyGame->GetDxCommon();
+	mBlocks.clear();
 
 	//jsonファイル読み込み
 	//読み込むファイルの名前を作成

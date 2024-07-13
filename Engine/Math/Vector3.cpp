@@ -1,5 +1,8 @@
 #include "Vector3.h"
 
+const Vector3 Vector3::kZero(0.0f, 0.0f, 0.0f);
+const Vector3 Vector3::kOne(1.0f, 1.0f, 1.0f);
+
 Vector3::Vector3() {
 	x = 0.0f;
 	y = 0.0f;

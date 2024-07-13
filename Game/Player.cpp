@@ -1,8 +1,9 @@
 #include "Player.h"
 #include "Transform.h"
 #include "3D/Model.h"
-#include "2D/Texture.h"
 #include "3D/Camera.h"
+#include "3D/ParticleManager.h"
+#include "2D/Texture.h"
 #include "2D/Sprite.h"
 #include "PlayerCamera.h"
 #include "MyGame.h"
@@ -14,15 +15,13 @@
 
 Player::Player(MyGame* myGame)
 	:GameObject(myGame) {
-
 }
 
 void Player::Initialize() {
-	mTransform.Create(mMyGame->GetDxCommon());
-	//初期化
 	mTransform.mScale = { 0.25f,0.25f,0.25f };
 	mTransform.mRotate = { 0.0f,0.0f,0.0f };
 	mTransform.mTranslate = { -5.0f,5.0f,-4.5f };
+	mTransform.Create(mMyGame->GetDxCommon());
 	mVelocity = { 0.1f,0.0f,0.1f };
 	mGravity = 0.03f;
 	mIsEnemyHit = false;
@@ -30,7 +29,7 @@ void Player::Initialize() {
 	mIsOperating = true;
 	mRotateSpeed = 0.05f;
 	mSpeed = 0.05f;
-	mHp = 2;
+	mHp = 3;
 	mForwardTimer = 5;
 	mBackTimer = 5;
 	mAttackCount = 0;
@@ -42,57 +41,48 @@ void Player::Initialize() {
 	mModel = mMyGame->GetResourceManager()->LoadModel("Resources/Models/Player/Chick.obj");
 	mModel->SetShadeType(ShadeType::PHONG);
 
-	mSandSmokeParticle = std::make_unique<ParticleManager>();
-	mSandSmokeParticle->SetInitTranslateMin({ -1.0f,-1.0f,-1.0f });
-	mSandSmokeParticle->SetInitTranslateMax({ 1.0f,1.0f,1.0f });
-	mSandSmokeParticle->SetInitVelocityMin({ -5.0f,5.0f,-5.0f });
-	mSandSmokeParticle->SetInitVelocityMax({ 5.0f,6.0f,5.0f });
-	mSandSmokeParticle->SetInitLifeTimeMin(0.5f);
-	mSandSmokeParticle->SetInitLifeTimeMax(1.0f);
+	mSandSmokeParticle = std::make_shared<ParticleManager>();
+	mSandSmokeParticle->Create(mMyGame->GetDxCommon(), mMyGame->GetResourceManager()->LoadTexture("Resources/Particle/SandSmoke.png"));
+	mSandSmokeParticle->SetInitTranslateMin({ -0.0f,-0.0f,-0.0f });
+	mSandSmokeParticle->SetInitTranslateMax({ 0.0f,0.0f,0.0f });
+	mSandSmokeParticle->SetInitVelocityMin({ -0.3f,0.3f,-0.3f });
+	mSandSmokeParticle->SetInitVelocityMax({ 0.3f,0.5f,0.3f });
+	mSandSmokeParticle->SetInitLifeTimeMin(0.2f);
+	mSandSmokeParticle->SetInitLifeTimeMax(0.5f);
+	mSandSmokeParticle->SetInitColorMax({ 116.0f / 255.0f,80.0f / 255.0f,48.0f / 255.0f });
+	mSandSmokeParticle->SetInitColorMin({ 116.0f / 255.0f,80.0f / 255.0f,48.0f / 255.0f });
+	mSandSmokeParticle->SetInitScale({ 0.3f,0.3f,0.3f });
 
-	/*mSeedSprite.resize(5);
+	mSeedSprite.resize(5);
+	mSeedSpriteTransform.resize(5);
 	for (uint32_t i = 0; i < mSeedSprite.size(); ++i) {
-		mSeedSprite[i] = std::make_unique<Sprite>();
-		mSeedSprite[i]->Create(dxCommon, "resources/Sprite/Ui/Seed/SeedSprite.png");
+		mSeedSprite[i] = std::make_shared<Sprite>();
+		mSeedSprite[i]->Create(mMyGame->GetDxCommon(), mMyGame->GetResourceManager()->LoadTexture("Resources/Sprites/Ui/Seed/Seed.png"));
+		mSeedSpriteTransform[i].mScale = { 1.0f,1.0f,1.0f };
+		mSeedSpriteTransform[i].mRotate = { 0.0f,0.0f,0.0f };
+		mSeedSpriteTransform[i].mTranslate = { 64.0f,0.0f,0.0f };
+		mSeedSpriteTransform[i].Create(mMyGame->GetDxCommon());
 	}
-
-	mHeartSprite.resize(2);
+	mHeartSprite.resize(3);
+	mHeartSpriteTransform.resize(3);
 	for (int32_t i = 0; i < mHeartSprite.size(); ++i) {
-		mHeartSprite[i] = std::make_unique<Sprite>();
-		mHeartSprite[i]->Create(dxCommon, "resources/Sprite/Ui/Heart/Heart.png");
-	}*/
-
-	/*mFireParticle = std::make_unique<ParticleList>();
-	mFireParticle->Create(mDxCommon);
-	mFireParticle->SetFrequency(0.01f);
-	mFireParticle->SetParticleTransform({ {2.0f,2.0f,2.0f},{0.0f,0.0f,0.0f},{0.0f,5.0f,0.0f} });
-	mFireParticle->SetVelocityMax({ 1.5f,5.0f,1.5f });
-	mFireParticle->SetVelocityMin({ -1.5f,2.0f,-1.5f });
-	mFireParticle->SetLifeTimeMax(1.0f);
-	mFireParticle->SetLifeTImeMin(0.5f);
-	mFireParticle->SetColorMax({ 1.0f,0.0f,0.0f });
-	mFireParticle->SetColorMin({ 1.0f,0.0f,0.0f });*/
+		mHeartSprite[i] = std::make_shared<Sprite>();
+		mHeartSprite[i]->Create(mMyGame->GetDxCommon(), mMyGame->GetResourceManager()->LoadTexture("Resources/Sprites/Ui/Heart/Heart.png"));
+		mHeartSpriteTransform[i].mScale = { 1.0f,1.0f,1.0f };
+		mHeartSpriteTransform[i].mRotate = { 0.0f,0.0f,0.0f };
+		mHeartSpriteTransform[i].mTranslate = { 64.0f,0.0f,0.0f };
+		mHeartSpriteTransform[i].Create(mMyGame->GetDxCommon());
+	}
 }
 
 void Player::Update(std::shared_ptr<Input> input) {
 	mModel->Update();
-
-	/*for (uint32_t i = 0; i < mAttackCount; ++i) {
-		mSeedSprite[i]->SetTranslate({ 64.0f * i,80.0f,0.0f });
-		mSeedSprite[i]->Update();
-	}
-	for (int32_t i = 0; i < mHp; ++i) {
-		mHeartSprite[i]->SetTranslate({ 64.0f * i,10.0f,0.0f });
-		mHeartSprite[i]->Update();
-	}*/
-
 	//Lスティック
 	Vector2 lStick = input->GetLStick();
 	//Rスティック
 	Vector2 rStick = input->GetRStick();
 	//回転行列
 	Matrix4x4 rotationMatrix = MakeRotateYMatrix(mCamera->GetRotate().y);
-
 	Vector3 frontVec = { 0.0f,0.0f,1.0f };//前方
 	Vector3 rightVec = { 1.0f,0.0f,0.0f };//右方向
 	//2つのベクトルをそれぞれビュー行列で変換。ビューに対して前方と右方向のベクトルが求まる
@@ -109,21 +99,13 @@ void Player::Update(std::shared_ptr<Input> input) {
 			mTransform.mTranslate += rightVec * mSpeed;
 			//カメラの回転 + スティックの方向 + 90°
 			mTransform.mRotate.y = mCamera->GetRotate().y + atan2f(-lStick.y, lStick.x) + kPi / 2.0f;
+			mSandSmokeParticle->SetIsPlaying(true);
+		} else {
+			mSandSmokeParticle->SetIsPlaying(false);
 		}
-
-		if (lStick.x >= 0.1f && lStick.y >= 0.1f) {
-			//パーティクル(砂煙)
-			mSandSmokeParticle->Update(mMyGame->GetCamera());
-			mSandSmokeParticle->SetEmitTranslate({ mTransform.mTranslate.x,mTransform.mTranslate.y,mTransform.mTranslate.z });
-			mSandSmokeParticle->SetInitVelocityMax({ 1.0f,4.0f,0.0f });
-			mSandSmokeParticle->SetInitVelocityMin({ 0.1f,4.0f,-1.0f });
-			mSandSmokeParticle->SetInitLifeTimeMax(0.5f);
-			mSandSmokeParticle->SetInitLifeTimeMin(0.2f);
-			mSandSmokeParticle->SetInitColorMax({ 116.0f / 255.0f,80.0f / 255.0f,48.0f / 255.0f });
-			mSandSmokeParticle->SetInitColorMin({ 116.0f / 255.0f,80.0f / 255.0f,48.0f / 255.0f });
-		}
-
-
+		//パーティクル
+		mSandSmokeParticle->Update(mMyGame->GetCamera());
+		mSandSmokeParticle->SetEmitTranslate({ mTransform.mTranslate.x,mTransform.mTranslate.y,mTransform.mTranslate.z });
 		//Bボタン
 		if (input->GetButtonDown(XINPUT_GAMEPAD_B)) {
 			if (mAttackCount > 0) {
@@ -172,19 +154,14 @@ void Player::Update(std::shared_ptr<Input> input) {
 		}
 	}
 
-	//#ifdef _DEBUG
-	//	ImGui::Begin("Debug");
-	//	ImGui::DragFloat3("player Position", &mTransform.mTranslate.x, 0.01f);
-	//	ImGui::DragFloat3("player Rotation", &mTransform.mRotate.x, 0.01f);
-	//	ImGui::End();
-	//#endif // DEBUG
-
-		//mFireParticle->DrawImGui();
-
-		/*if (mAttackTimes > 0) {
-			mFireParticle->Update();
-			mFireParticle->SetEmitTransform({ {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{mTransform.translate.x,mTransform.translate.y,mTransform.translate.z} });
-		}*/
+	for (uint32_t i = 0; i < mSeedSprite.size(); ++i) {
+		mSeedSpriteTransform[i].mTranslate = { i * 64.0f,80.0f,0.0f };
+		mSeedSpriteTransform[i].UpdateMatrix();
+	}
+	for (uint32_t i = 0; i < mHeartSprite.size(); ++i) {
+		mHeartSpriteTransform[i].mTranslate = { i * 64.0f,10.0f,0.0f };
+		mHeartSpriteTransform[i].UpdateMatrix();
+	}
 }
 
 void Player::DrawModel(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {
@@ -194,14 +171,14 @@ void Player::DrawModel(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> command
 }
 
 void Player::DrawSprite(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {
-	/*for (uint32_t i = 0; i < mAttackCount; ++i) {
-		mSeedSprite[i]->Draw(commandList);
+	for (uint32_t i = 0; i < mAttackCount; ++i) {
+		mSeedSprite[i]->Draw(commandList, mSeedSpriteTransform[i]);
 	}
 	for (int32_t i = 0; i < mHp; ++i) {
-		mHeartSprite[i]->Draw(commandList);
-	}*/
+		mHeartSprite[i]->Draw(commandList, mHeartSpriteTransform[i]);
+	}
 }
 
-void Player::ParticleDraw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {
+void Player::DrawParticle(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList) {
 	mSandSmokeParticle->Draw(commandList);
 }

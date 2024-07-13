@@ -16,7 +16,7 @@ void Crank::Initialize() {
 	mCalculateAngle = 0.0f;
 	mCurrentAngle = 0.0f;
 	mTransform.mScale = { 0.5f,0.5f,0.5f };
-	mTransform.mRotate = { 0.0f,0.0f,0.0f };
+	mTransform.mRotate = { 0.0f,kPi/2.0f,0.0f };
 	mTransform.mTranslate = { 0.0f,3.0f,2.5f };
 	mFoundationTransform.mScale = { 0.5f,0.5f,0.5f };
 	mFoundationTransform.mRotate = { 0.0f,0.0f,0.0f };
@@ -27,8 +27,8 @@ void Crank::Initialize() {
 	mTransform.Create(mMyGame->GetDxCommon());
 	mFoundationTransform.Create(mMyGame->GetDxCommon());
 	mRStickTransform.Create(mMyGame->GetDxCommon());
-	mCrankModel = mMyGame->GetResourceManager()->LoadModel("Resources/Models/Crank/Crank.obj"); //クランク本体
-	mFoundationModel = mMyGame->GetResourceManager()->LoadModel("Resources/Models/Foundation/Foundation.obj"); //土台
+	mCrankModel = mMyGame->GetResourceManager()->LoadModel("Resources/Models/Crank/Crank.gltf"); //クランク本体
+	mFoundationModel = mMyGame->GetResourceManager()->LoadModel("Resources/Models/Crank/CrankBase.gltf"); //土台
 	mRStickSprite = std::make_shared<Sprite>();
 	mRStickSprite->Create(mMyGame->GetDxCommon(),mMyGame->GetResourceManager()->LoadTexture("Resources/Sprites/Ui/Buttons/xbox_stick_top_r.png"));
 }

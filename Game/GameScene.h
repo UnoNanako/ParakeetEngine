@@ -1,4 +1,5 @@
 #pragma once
+#include "Transform.h"
 #include <memory>
 #include <wrl.h>
 #include <d3d12.h>
@@ -15,6 +16,11 @@ class RotateEnemy;
 class Ladder;
 class Crank;
 class Seed;
+class RotateBridge;
+class Gem;
+class Star;
+class Skydome;
+class Sprite;
 
 class GameScene{
 public:
@@ -22,8 +28,12 @@ public:
 	void Initialize();
 	void Finalize();
 	void Update(std::shared_ptr<Input> input);
-	void ModelDraw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList);
-	void SpriteDraw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList);
+	void DrawModel(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList);
+	void DrawSprite(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList);
+	void DrawParticle(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList);
+	void UpdateObject(std::shared_ptr<Input> input);
+	void UpdateCollision(std::shared_ptr<Input> input);
+	void GameInit();
 
 	std::shared_ptr<Player> GetPlayer() { return mPlayer; }
 
@@ -40,5 +50,29 @@ private:
 	std::shared_ptr<Crank> mCrank;
 	std::vector<std::shared_ptr<Ladder>> mLadders;
 	std::vector<std::shared_ptr<Seed>> mSeeds;
-};
+	std::shared_ptr<RotateBridge> mRotateBridge;
+	std::vector<std::shared_ptr<Gem>> mGems;
+	std::shared_ptr<Star> mStar;
+	std::shared_ptr<Skydome> mSkydome;
+	//-----スプライト-----
+	std::shared_ptr<Sprite> mNowLoading;
+	Transform mNowLoadingTransform;
 
+	//シーン
+	enum Scene {
+		GAME,
+		CLEAR,
+		OVER
+	};
+	Scene mScene = GAME;
+	bool mIsTransition = false;
+	bool mIsTitleScene;
+
+	//イージング
+	Vector3 mInStart;
+	Vector3 mInEnd;
+	Vector3 mOutStart;
+	Vector3 mOutEnd;
+	float mInT;
+	float mOutT;
+};

@@ -62,20 +62,20 @@ void MyGame::Draw() {
 
 	mModelCommon->PreDraw(mDxCommon,mCamera);
 	//-----モデルの描画ここから-----
-	mGameScene->ModelDraw(mDxCommon->GetCommandList());
+	mGameScene->DrawModel(mDxCommon->GetCommandList());
 	//mModel->Draw(mDxCommon->GetCommandList(), mModelTransform);
 	//-----モデルの描画ここまで-----
 	mModelCommon->PostDraw(mDxCommon);
 
 	mParticleCommon->PreDraw(mDxCommon,mCamera);
 	//-----パーティクルの描画ここから-----
-
+	mGameScene->DrawParticle(mDxCommon->GetCommandList());
 	//-----パーティクルの描画ここまで-----
 	mParticleCommon->PostDraw(mDxCommon);
 
 	mSpriteCommon->PreDraw(mDxCommon);
 	//-----スプライトの描画ここから-----
-	mGameScene->SpriteDraw(mDxCommon->GetCommandList());
+	mGameScene->DrawSprite(mDxCommon->GetCommandList());
 	//mSprite->Draw(mDxCommon->GetCommandList(),mSpriteTransform);
 	//-----スプライトの描画ここまで-----
 	mSpriteCommon->PostDraw(mDxCommon);

@@ -1,8 +1,10 @@
 #pragma once
 #include "GameObject.h"
-#include "3D/ParticleManager.h"
+#include <vector>
 
 class PlayerCamera;
+class Sprite;
+class ParticleManager;
 
 class Player : public GameObject{
 public:
@@ -11,7 +13,7 @@ public:
 	void Update(std::shared_ptr<Input> input)override;
 	void DrawModel(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList)override;
 	void DrawSprite(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList)override;
-	void ParticleDraw(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList);
+	void DrawParticle(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList);
 
 	/// <summary>
 	/// アクセッサ
@@ -38,7 +40,7 @@ private:
 	AABB mLocalAABB; //ローカル
 	AABB mWorldAABB; //ワールド
 	std::shared_ptr<Model> mModel;
-	std::unique_ptr<ParticleManager> mSandSmokeParticle;
+	std::shared_ptr<ParticleManager> mSandSmokeParticle;
 	std::shared_ptr<PlayerCamera> mCamera;
 	bool mIsOperating; //操作できるかどうかを管理するフラグ
 	int32_t mHp; //最大2
@@ -57,7 +59,9 @@ private:
 	int32_t mForwardTimer; //前進タイマー
 	int32_t mBackTimer; //後退タイマー
 
-	//std::vector<std::unique_ptr<Sprite>> mSeedSprite;
-	//std::vector<std::unique_ptr<Sprite>> mHeartSprite;
+	std::vector<std::shared_ptr<Sprite>> mSeedSprite;
+	std::vector<std::shared_ptr<Sprite>> mHeartSprite;
+	std::vector<Transform> mSeedSpriteTransform;
+	std::vector<Transform> mHeartSpriteTransform;
 };
 

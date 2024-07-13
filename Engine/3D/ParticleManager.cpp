@@ -59,12 +59,12 @@ void ParticleManager::Create(std::shared_ptr<DirectXCommon> dxCommon, std::share
 	mMaterialData->mColor = { 1.0f,1.0f,1.0f,1.0f };
 
 	mEmitter.mCount = 3; //発生数
-	mEmitter.mFrequency = 0.5f; //0.5秒ごとに発生
+	mEmitter.mFrequency = 0.3f; //0.5秒ごとに発生
 	mEmitter.mFrequencyTime = 0.0f; //発生頻度用の時刻、0で初期化
 	mEmitter.mTransform.mScale = { 1.0f,1.0f,1.0f };
 	mEmitter.mTransform.mRotate = { 0.0f,0.0f,0.0f };
 	mEmitter.mTransform.mTranslate = { 0.0f,0.0f,0.0f };
-
+	mScale = { 1.0f,1.0f,1.0f };
 	mIsPlaying = true;
 }
 
@@ -124,7 +124,7 @@ Particle ParticleManager::MakeParticle(const Vector3& translate) {
 	Particle particle;
 	particle.mCurrentTime = 0;
 	particle.mLifeTime = Random::Rand(mInitLifeTimeMin, mInitLifeTimeMax);
-	particle.mTransform.mScale = { 1.0f,1.0f,1.0f };
+	particle.mTransform.mScale = { mScale.x,mScale.y,mScale.z };
 	particle.mTransform.mRotate = { 0.0f,0.0f,0.0f };
 	particle.mVelocity = { Random::Rand(mInitVelocityMin.x,mInitVelocityMax.x), Random::Rand(mInitVelocityMin.y,mInitVelocityMax.y), Random::Rand(mInitVelocityMin.z,mInitVelocityMax.z) };
 	particle.mColor = { Random::Rand(mInitColorMin.x,mInitColorMax.x),  Random::Rand(mInitColorMin.y,mInitColorMax.y), Random::Rand(mInitColorMin.z,mInitColorMax.z), 1.0f };
