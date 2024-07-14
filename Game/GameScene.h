@@ -40,12 +40,15 @@ public:
 private:
 	MyGame* mMyGame;
 	std::shared_ptr<Map> mMap;
+
 	//-----プレイヤー-----
 	std::shared_ptr<Player> mPlayer;
+
 	//-----敵-----
 	std::shared_ptr<Ghost> mGhost;
 	std::shared_ptr<RotateEnemy> mRotateEnemy;
 	std::vector<std::shared_ptr<WalkEnemy>> mWalkEnemies;
+
 	//-----オブジェクト-----
 	std::shared_ptr<Crank> mCrank;
 	std::vector<std::shared_ptr<Ladder>> mLadders;
@@ -54,11 +57,20 @@ private:
 	std::vector<std::shared_ptr<Gem>> mGems;
 	std::shared_ptr<Star> mStar;
 	std::shared_ptr<Skydome> mSkydome;
-	//-----スプライト-----
-	std::shared_ptr<Sprite> mNowLoading;
-	Transform mNowLoadingTransform;
 
-	//シーン
+	//-----スプライト-----
+	std::shared_ptr<Sprite> mTitle;
+	std::shared_ptr<Sprite> mNowLoading;
+	std::shared_ptr<Sprite> mGameClear;
+	std::shared_ptr<Sprite> mGameOver;
+	std::shared_ptr<Sprite> mAButton;
+	Transform mTitleTransform;
+	Transform mNowLoadingTransform;
+	Transform mGameClearTransform;
+	Transform mGameOverTransform;
+	Transform mAButtonTransform;
+
+	//-----シーン-----
 	enum Scene {
 		GAME,
 		CLEAR,
@@ -68,7 +80,7 @@ private:
 	bool mIsTransition = false;
 	bool mIsTitleScene;
 
-	//イージング
+	//-----イージング-----
 	Vector3 mInStart;
 	Vector3 mInEnd;
 	Vector3 mOutStart;

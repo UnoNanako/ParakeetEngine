@@ -5,10 +5,6 @@
 Camera::~Camera(){
 }
 
-void Camera::Initialize(){
-	mFov = 50.0f;
-}
-
 void Camera::UpdateMatrix(){
 	Matrix4x4 worldMatrix = MakeAffineMatrix({1.0f,1.0f,1.0f}, mRotate, mTranslate);
 	mViewMatrix = Inverse(worldMatrix);

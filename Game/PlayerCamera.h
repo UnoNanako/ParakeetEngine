@@ -12,6 +12,7 @@ class Input;
 class PlayerCamera : public Camera{
 public:
 	PlayerCamera();
+	void Initialize()override;
 	void Update(std::shared_ptr<Input> input)override;
 
 	/// <summary>

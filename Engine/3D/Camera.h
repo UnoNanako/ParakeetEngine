@@ -11,7 +11,7 @@ class Input;
 class Camera{
 public:
 	virtual ~Camera();
-	void Initialize();
+	virtual void Initialize() {}
 	virtual void Update(std::shared_ptr<Input> input){}
 	//TransformのUpdateMatrixを呼び出してから
 	void UpdateMatrix();
@@ -30,6 +30,6 @@ protected:
 	Vector3 mTranslate = { 0.0f,0.0f,0.0f };
 	Matrix4x4 mViewMatrix;
 	Matrix4x4 mProjectionMatrix;
-	float mFov; //視野角(度数法)
+	float mFov = 50.0f; //視野角(度数法)
 };
 

@@ -16,7 +16,7 @@ Star::Star(MyGame* myGame)
 void Star::Initialize(){
 	mTransform.mScale = { 0.2f,0.2f,0.2f };
 	mTransform.mRotate = { 0.0f,0.0f,0.0f };
-	mTransform.mTranslate = { -3.25f,5.5f,20.0f };
+	mTransform.mTranslate = { -3.5f,5.5f,20.0f };
 	mTransform.Create(mMyGame->GetDxCommon());
 	mModel = mMyGame->GetResourceManager()->LoadModel("Resources/Models/Star/Star.obj");
 	/*mParticle = std::make_unique<ParticleList>();

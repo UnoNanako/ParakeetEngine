@@ -6,10 +6,15 @@
 #include "Player.h"
 #include <algorithm>
 
-PlayerCamera::PlayerCamera() {
-	mTranslate = { -4.25f,1.6f,-3.8f };
+PlayerCamera::PlayerCamera() 
+	:Camera(){
+}
+
+void PlayerCamera::Initialize(){
+	mTranslate = { -4.5f,1.3f,-3.5f };
 	mOffset = { 0.0f,0.0f,-10.0f };
-	mRotate.x = kPi / 180.0f * 30.0f;
+	mRotate.x = kPi / 180.0f * 40.0f;
+	mRotate.y = kPi / 180.0f * -150.0f;
 	mActualRotate = mRotate;
 	//mT = 0.0f;
 }

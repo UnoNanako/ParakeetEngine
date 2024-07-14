@@ -15,10 +15,10 @@ Crank::Crank(MyGame* myGame)
 void Crank::Initialize() {
 	mCalculateAngle = 0.0f;
 	mCurrentAngle = 0.0f;
-	mTransform.mScale = { 0.5f,0.5f,0.5f };
+	mTransform.mScale = { 1.0f,1.0f,1.0f };
 	mTransform.mRotate = { 0.0f,kPi/2.0f,0.0f };
 	mTransform.mTranslate = { 0.0f,3.0f,2.5f };
-	mFoundationTransform.mScale = { 0.5f,0.5f,0.5f };
+	mFoundationTransform.mScale = { 1.0f,1.0f,1.0f };
 	mFoundationTransform.mRotate = { 0.0f,0.0f,0.0f };
 	mFoundationTransform.mTranslate = { 0.0f,3.0f,2.5f };
 	mRStickTransform.mScale = { 1.0f,1.0f,1.0f };
